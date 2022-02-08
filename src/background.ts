@@ -89,6 +89,8 @@ if (isDevelopment) {
 }
 
 // custom code
+import axios from "axios"
+
 import Store from "electron-store";
 
 const store = new Store();
@@ -107,7 +109,10 @@ ipcMain.on('window-handle', (event, handletype) => {
       break;
   }
 })
-
+ipcMain.handle('request-get', async (_, axios_request: string | any) => {
+  const result = await axios(axios_request)
+  return { data: result.data, status: result.status }
+})
 
 // IPC listener
 ipcMain.on("electron-store-get", async (event, val) => {
