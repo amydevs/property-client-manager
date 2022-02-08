@@ -79,3 +79,35 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss">
+.v-toolbar__content {
+  * {
+    -webkit-app-region: no-drag;
+  }
+  -webkit-app-region: drag;
+}
+html{
+  overflow-y: hidden !important;
+  .v-main__wrap {
+    overflow-y: auto !important;
+  }
+}
+:root {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-corner {
+      background: rgba(0,0,0,0);
+  }
+  ::-webkit-scrollbar-thumb {
+      background-color: white;
+      min-width: 32px;
+      min-height: 32px;
+  }
+  ::-webkit-scrollbar-track {
+      background-color: #272727;
+  }
+}
+</style>
