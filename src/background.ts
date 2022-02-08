@@ -1,9 +1,13 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+import path from 'path'
+
+let win: BrowserWindow;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -12,7 +16,9 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
+    titleBarStyle: 'hidden',
+    autoHideMenuBar: true,
     width: 800,
     height: 600,
     webPreferences: {
@@ -21,7 +27,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
           .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      preload: path.join(__dirname, "preload.js")
     }
   })
 
@@ -59,7 +66,7 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
+    } catch (e: any) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
@@ -80,3 +87,43 @@ if (isDevelopment) {
     })
   }
 }
+
+// custom code
+import Store from "electron-store";
+
+const store = new Store();
+
+//handlers
+ipcMain.on('window-handle', (event, handletype) => {
+  switch (handletype) {
+    case "minimize":
+      win.minimize();
+      break;
+    case "maximize":
+      !win.isMaximized() ? win.maximize() : win.unmaximize();
+      break;
+    case "close":
+      win.close();
+      break;
+  }
+})
+
+
+// IPC listener
+ipcMain.on("electron-store-get", async (event, val) => {
+  event.returnValue = store.get(val);
+});
+ipcMain.on("electron-store-set", async (event, key, val) => {
+  store.set(key, val);
+});
+
+ipcMain.on('dialog-open', (event) => {
+  try {
+    event.returnValue = dialog.showOpenDialogSync({
+      properties: ['openDirectory']
+    })
+  }
+  catch {
+    event.returnValue = null
+  } 
+})

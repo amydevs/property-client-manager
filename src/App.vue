@@ -1,44 +1,56 @@
 <template>
   <v-app>
-    <v-app-bar
+    <v-navigation-drawer
+      v-model="drawer"
+      temporary
       app
-      color="primary"
-      dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+      <v-list
+        dense nav
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <v-list-item-group color='primary' mandatory>
+            <v-list-item
+                v-for="item in items"
+                :key="item.title"
+                
+                router :to="item.route"
+            >
+              <v-list-item-icon>
+                  <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+    </v-navigation-drawer>
+    
+    <v-app-bar
+      ref="appbar"
+      app
+      dense
+      fixed
+      clipped-right
+    >
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="$electron.window.handle('minimize')">
+        <v-icon>mdi-window-minimize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('maximize')">
+        <v-icon>mdi-window-maximize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('close')">
+        <v-icon>mdi-window-close</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <v-main>
-      <router-view/>
+    <v-main :style="`height: calc(100vh - ${appbarHeight}px);`" class="">
+      <keep-alive include="Home">
+        <router-view :key="$route.fullPath" />
+      </keep-alive>
     </v-main>
   </v-app>
 </template>
@@ -50,7 +62,20 @@ export default Vue.extend({
   name: 'App',
 
   data: () => ({
-    //
+    appbarHeight: 48,
+    drawer: false,
+    len: 0,
+    perc: 0,
+    items: [
+      {icon: 'mdi-home', title:'Home', route:'/'},
+      {icon: 'mdi-tools', title:'Library', route:'/library'},
+      {icon: 'mdi-cog', title:'Settings', route:'/settings'}
+    ],
   }),
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    }
+  }
 });
 </script>
