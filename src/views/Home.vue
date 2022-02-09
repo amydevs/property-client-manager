@@ -26,6 +26,9 @@ export default Vue.extend({
       clients: [
         {
           name: "A"
+        },
+        {
+          name: "A"
         }
       ] as Client[],
       loaded: true

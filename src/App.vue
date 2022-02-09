@@ -60,7 +60,15 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'App',
-
+  mounted() {
+    // appbar observer
+    const appbaro = new ResizeObserver((e) => {
+      this.appbarHeight = e[0].contentRect.width;
+    });
+    if (this.$refs.appbar) {
+      appbaro.observe((this.$refs.appbar as any).$el);
+    }
+  },
   data: () => ({
     appbarHeight: 48,
     drawer: false,

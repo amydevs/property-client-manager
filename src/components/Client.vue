@@ -1,6 +1,6 @@
 <template>
 <v-lazy
-    width="500px"
+    width="300px"
     class="ma-3 text-left flex-grow-1"
 >
     <v-card
@@ -9,7 +9,7 @@
     <div class="d-flex" style="height: 100%;">
         <v-avatar
                 class="ma-3 my-auto"
-                size="150"
+                size="100"
                 tile
             >
             <v-img 

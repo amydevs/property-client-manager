@@ -9,7 +9,7 @@
             outlined
             clearable
             hide-details="auto"            
-            :rules="[() => (length != 0 || 'No Charts Found...')]"
+            :rules="[() => (length != 0 || 'No Clients Found...')]"
         ></v-text-field>
       </v-card>
       <ClientComp v-for="(chart, i) in searchFilter" :chart="chart" :key="i" />
