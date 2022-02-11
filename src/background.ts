@@ -95,6 +95,10 @@ import Store from "electron-store";
 
 const store = new Store();
 
+function init() {
+  store.get("clientsPath") as string
+}
+
 //handlers
 ipcMain.on('window-handle', (event, handletype) => {
   switch (handletype) {
