@@ -106,8 +106,12 @@ function init() {
   db = new ClientsDB(dbPath);
 }
 
-ipcMain.on("get-clients", async (event, arg) => {
-  
+ipcMain.on("clients-get", async (event, arg) => {
+  console.log(db)
+  event.returnValue = db;
+})
+ipcMain.handle("clients-write", (e, adb:ClientsDB) => {
+  (new ClientsDB(adb)).write();
 })
 
 //handlers

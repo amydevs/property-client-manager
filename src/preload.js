@@ -8,6 +8,12 @@ const {
 // the ipcRenderer without exposing the entire object
 
 contextBridge.exposeInMainWorld("electron", {
+    clients: {
+        get: () => ipcRenderer.sendSync("clients-get"),
+        write: (e) => {
+            ipcRenderer.handle("clients-write", e);
+        }
+      },
     window: {
         handle: (handleType) => {
             return ipcRenderer.send("window-handle", handleType);

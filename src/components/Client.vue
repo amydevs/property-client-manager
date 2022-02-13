@@ -19,7 +19,7 @@
         </v-avatar>
         <div class="flex-grow-1">
             
-            <v-card-title v-text="chart.name"></v-card-title>
+            <v-card-title v-text="chart.fname"></v-card-title>
             <v-card-subtitle v-text="chart.author"></v-card-subtitle>
         </div>
     </div>
@@ -30,12 +30,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Client } from '@/types/Client'
+import { TClient } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     name: 'Chart',
     props: {
-        chart: Object as () => Client,
+        chart: Object as () => TClient,
         value: Number
     },
     components: {

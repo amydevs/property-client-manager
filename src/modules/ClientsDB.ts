@@ -3,16 +3,22 @@ import fs from "fs";
 export class ClientsDB {
     jsonPath: string;
     clients: TClient[];
-    constructor(jsonPath: string) {
-        this.jsonPath = jsonPath;
+    constructor(jsonPathOrInst: string | ClientsDB) {
         this.clients = [];
-        try {
-            this.clients = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
-        }
-        catch (err:any) {
-            if (typeof err.code == "string" && err.code == "ENOENT") {
-                this.write();
+        this.jsonPath = "";
+        if (typeof jsonPathOrInst == "string") {
+            this.jsonPath = jsonPathOrInst;
+            try {
+                Object.assign(this, JSON.parse(fs.readFileSync(jsonPathOrInst, "utf-8")));
             }
+            catch (err:any) {
+                if (typeof err.code == "string" && err.code == "ENOENT") {
+                    this.write();
+                }
+            }
+        }
+        else {
+            Object.assign(this, jsonPathOrInst);
         }
     }
     toJson(key:string, value:any) {

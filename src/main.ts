@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import { ClientsDB } from './modules/ClientsDB'
 
 Vue.prototype.$electron = window.electron
 Vue.config.productionTip = false
@@ -17,6 +18,10 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      clients: {
+        get: () => ClientsDB
+        write: (e: ClientsDB) => void
+      },
       window: {
         handle: (handleType: "minimize" | "maximize" | "close") => void;
       },
