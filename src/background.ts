@@ -70,6 +70,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  init()
   createWindow()
 })
 
@@ -89,15 +90,25 @@ if (isDevelopment) {
 }
 
 // custom code
+import fs from "fs";
 import axios from "axios"
-
 import Store from "electron-store";
+
+import { ClientsDB } from "@/modules/ClientsDB";
 
 const store = new Store();
 
+let db = {} as ClientsDB;
+
 function init() {
-  store.get("clientsPath") as string
+  const clientsPath = store.get("clientsPath") as string
+  const dbPath = path.join(clientsPath, "db.json");
+  db = new ClientsDB(dbPath);
 }
+
+ipcMain.on("get-clients", async (event, arg) => {
+  
+})
 
 //handlers
 ipcMain.on('window-handle', (event, handletype) => {

@@ -63,7 +63,7 @@
                 return existsBool || 'Folder Path does not exist.'
               }
             ],
-            value: window.electron.store.get('gamePath'),
+            value: window.electron.store.get('clientsPath'),
           },
           {
             type: "bool",
