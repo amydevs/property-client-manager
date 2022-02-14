@@ -59,9 +59,6 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 
-import { keys } from 'ts-transformer-keys';
-import { IClient } from '@/modules/ClientsDB'
-
 export default Vue.extend({
   name: 'App',
   mounted() {
@@ -72,7 +69,6 @@ export default Vue.extend({
     if (this.$refs.appbar) {
       appbaro.observe((this.$refs.appbar as any).$el);
     }
-    const d = keys<IClient>()
   },
   data: () => ({
     appbarHeight: 48,
