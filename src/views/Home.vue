@@ -13,7 +13,11 @@
       right
       bottom
       :to="{name: 'ClientCreate'}"
-    ></v-btn>
+    >
+      <v-icon dark>
+          mdi-plus
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 

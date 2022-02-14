@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld("electron", {
     clients: {
         get: () => ipcRenderer.sendSync("clients-get"),
         write: (e) => {
-            ipcRenderer.handle("clients-write", e);
+            ipcRenderer.invoke("clients-write", e);
         }
       },
     window: {

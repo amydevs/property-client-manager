@@ -105,10 +105,14 @@ function init() {
   if (clientsPath) {
     const dbPath = path.join(clientsPath, "db.json");
     db = new ClientsDB(dbPath);
+    fs.watch(dbPath, (eventType, filename) => {
+      db = new ClientsDB(dbPath);
+    })
   }
 }
 
 ipcMain.on("clients-get", async (event, arg) => {
+  console.log(db)
   event.returnValue = db;
 })
 ipcMain.handle("clients-write", (e, adb:ClientsDB) => {

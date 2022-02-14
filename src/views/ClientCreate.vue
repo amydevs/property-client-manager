@@ -43,7 +43,7 @@
             right
             bottom
             ref="backBtn"
-            @click="$router.go(-1)"
+            @click="done"
         >
             <v-icon dark>
                 mdi-check
@@ -63,6 +63,14 @@ export default Vue.extend({
     },
     mounted() {
        
+    },
+    methods: {
+        done() {
+            const tempDb = window.electron.clients.get()
+            tempDb.clients.push(this.client)
+            window.electron.clients.write(tempDb)
+            this.$router.go(-1)
+        }
     },
     computed: {
         clientEntries() {
