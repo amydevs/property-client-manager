@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class ClientsDB {
     jsonPath: string;
-    clients: IClient[];
+    clients: Client[];
     constructor(jsonPathOrInst: string | ClientsDB) {
         this.clients = [];
         this.jsonPath = "";
@@ -35,25 +35,33 @@ export class ClientsDB {
 
 }
 
-export interface IClient {
-    id: string;
-    fname: string;
-    lname: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-    notes: string;
-    created: Date;
-    updated: Date;
-    localResident: Boolean;
-    FIRB: Boolean;
+export class FieldInfo {
+    name: string;
+    hidden?: boolean;
+    constructor(name: string, hidden: boolean = false) {
+        this.name = name;
+        this.hidden = hidden;
+    }
 }
 
-export class Client implements IClient {
+export class ClientInfo {
+    id = new FieldInfo("id", true);
+    fname = new FieldInfo("First Name");
+    lname = new FieldInfo("Last Name");
+    email = new FieldInfo("Email");
+    phone = new FieldInfo("Phone Number");
+    address = new FieldInfo("Address");
+    city = new FieldInfo("City");
+    state = new FieldInfo("State");
+    zip = new FieldInfo("Zip Code");
+    country = new FieldInfo("Country");
+    notes = new FieldInfo("Notes");
+    created = new FieldInfo("Created", true);
+    updated = new FieldInfo("Updated", true);
+    localResident = new FieldInfo("Local Resident");
+    FIRB = new FieldInfo("FIRB");
+}
+export class Client {
     id = uuidv4();
     fname = "";
     lname = "";
@@ -70,3 +78,4 @@ export class Client implements IClient {
     localResident = false;
     FIRB = false;
 }
+

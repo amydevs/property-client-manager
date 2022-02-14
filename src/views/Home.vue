@@ -8,7 +8,6 @@
     ></v-progress-circular>
     <ClientContainer :clients="clientsdb.clients" />
     <v-btn
-      elevation="2"
       fab 
       fixed
       right
@@ -21,7 +20,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import ClientContainer from '@/components/ClientContainer.vue'
-import { IClient } from '@/modules/ClientsDB'
+import { Client } from '@/modules/ClientsDB'
 
 export default Vue.extend({
   name: 'Home',

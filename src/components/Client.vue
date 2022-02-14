@@ -30,12 +30,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { IClient } from '@/modules/ClientsDB'
+import { Client } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     name: 'Chart',
     props: {
-        chart: Object as () => IClient,
+        chart: Object as () => Client,
         value: Number
     },
     components: {
