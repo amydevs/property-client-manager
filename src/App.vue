@@ -56,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 
 export default Vue.extend({

@@ -102,12 +102,13 @@ let db = {} as ClientsDB;
 
 function init() {
   const clientsPath = store.get("clientsPath") as string
-  const dbPath = path.join(clientsPath, "db.json");
-  db = new ClientsDB(dbPath);
+  if (clientsPath) {
+    const dbPath = path.join(clientsPath, "db.json");
+    db = new ClientsDB(dbPath);
+  }
 }
 
 ipcMain.on("clients-get", async (event, arg) => {
-  console.log(db)
   event.returnValue = db;
 })
 ipcMain.handle("clients-write", (e, adb:ClientsDB) => {
