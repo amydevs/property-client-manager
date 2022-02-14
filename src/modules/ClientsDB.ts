@@ -1,4 +1,5 @@
 import fs from "fs";
+import { v4 as uuidv4 } from 'uuid';
 
 export class ClientsDB {
     jsonPath: string;
@@ -35,7 +36,7 @@ export class ClientsDB {
 }
 
 export interface IClient {
-    id: number;
+    id: string;
     fname: string;
     lname: string;
     email: string;
@@ -50,4 +51,22 @@ export interface IClient {
     updated: Date;
     localResident: Boolean;
     FIRB: Boolean;
+}
+
+export class Client implements IClient {
+    id = uuidv4();
+    fname = "";
+    lname = "";
+    email = "";
+    phone = "";
+    address = "";
+    city = "";
+    state = "";
+    zip = "";
+    country = "";
+    notes = "";
+    created = new Date();
+    updated = new Date();
+    localResident = false;
+    FIRB = false;
 }

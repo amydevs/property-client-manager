@@ -13,6 +13,7 @@
       fixed
       right
       bottom
+      :to="{name: 'ClientCreate'}"
     ></v-btn>
   </div>
 </template>

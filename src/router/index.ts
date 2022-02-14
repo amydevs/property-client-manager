@@ -11,6 +11,11 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
+    path: '/client-create',
+    name: 'ClientCreate',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ClientCreate.vue')
+  },
+  {
     path: '/settings',
     name: 'Settings',
     // route level code-splitting
