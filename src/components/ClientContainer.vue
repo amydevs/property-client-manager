@@ -21,7 +21,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import ClientComp from '@/components/Client.vue'
-import { TClient } from '@/modules/ClientsDB'
+  import { IClient } from '@/modules/ClientsDB'
 
   export default Vue.extend({
     name: 'ChartsContainer',    
@@ -36,14 +36,14 @@ import { TClient } from '@/modules/ClientsDB'
     },
     props: {
       clients: {
-        type: Array as () => TClient[]
+        type: Array as () => IClient[]
       }
     },
     computed: {
       searchFilter() {
         const len = this.search.length as number
         
-        var returnVal = this.clients as TClient[]
+        var returnVal = this.clients as IClient[]
         
         const lowercaseSearch = this.search.toLowerCase()
         returnVal = returnVal.filter(e => {

@@ -2,7 +2,7 @@ import fs from "fs";
 
 export class ClientsDB {
     jsonPath: string;
-    clients: TClient[];
+    clients: IClient[];
     constructor(jsonPathOrInst: string | ClientsDB) {
         this.clients = [];
         this.jsonPath = "";
@@ -34,7 +34,7 @@ export class ClientsDB {
 
 }
 
-export interface TClient {
+export interface IClient {
     id: number;
     fname: string;
     lname: string;
@@ -46,6 +46,8 @@ export interface TClient {
     zip: string;
     country: string;
     notes: string;
-    created: string;
-    updated: string;
+    created: Date;
+    updated: Date;
+    localResident: Boolean;
+    FIRB: Boolean;
 }
