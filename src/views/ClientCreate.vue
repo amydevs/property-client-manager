@@ -81,9 +81,17 @@ export default Vue.extend({
         done() {
             if ((this.$refs.form as any).validate()) {
                 const tempDb = window.electron.clients.get()
-                tempDb?.clients.push(this.client)
-                if (tempDb) window.electron.clients.write(tempDb)
-                this.$router.go(-1)
+                if (tempDb) {
+                    let existingClientIndex = tempDb.clients.findIndex((e) => e.id === this.client.id);
+
+                    console.log(existingClientIndex)
+
+                    if (existingClientIndex !== -1) tempDb.clients[existingClientIndex] = this.client;
+                    else tempDb?.clients.push(this.client);
+                    
+                    if (tempDb) window.electron.clients.write(tempDb)
+                    this.$router.go(-1)
+                }
             }
         }
     },
