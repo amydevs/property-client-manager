@@ -4,9 +4,20 @@
         <v-row class="justify-center mb-1">
             <client-comp :client="client"/>
         </v-row>
-        <v-card class="flex-grow-1">
+        <v-card class="flex-grow-1 mb-3">
             <v-card-title>Notes</v-card-title>
             <v-card-text v-html="markdownInfo"></v-card-text>
+        </v-card>
+        <v-card class="flex-grow-1 mb-3">
+            <v-card-title>Reminders</v-card-title>
+            <v-card-text>
+                <v-form>
+                    <v-text-field v-model="newReminder.title"></v-text-field>
+                    <v-textarea v-model="newReminder.details"></v-textarea>
+                    <v-btn @click="addReminder">Add</v-btn>
+                </v-form>
+                
+            </v-card-text>
         </v-card>
     </v-container>
     <v-btn
@@ -48,7 +59,7 @@ const md = new mdit({
     linkify: true
 });
 
-import { Client, ClientInfo } from '@/modules/ClientsDB'
+import { Client, ClientInfo, Reminder } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
     components: {
@@ -58,7 +69,12 @@ export default Vue.extend({
         return {
             client: window.electron.clients.get()?.clients.find(c => c.id === this.$route.params.id),
             markdownInfo: "",
-            clientInfo: new ClientInfo()
+            clientInfo: new ClientInfo(),
+            newReminder: {
+                title: "",
+                details: "",
+                date: new Date()
+            } as Reminder
         }
     },
     mounted() {
@@ -67,6 +83,16 @@ export default Vue.extend({
         }
     },
     methods: {
+        addReminder() {
+            const tempDb = window.electron.clients.get();
+            this.client?.reminders.push(this.newReminder);
+
+            let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.client?.id);
+
+            if (tempDb && existingClientIndex !== -1) {
+                tempDb[existingClientIndex] = this.client;
+            }
+        }
     },
     computed: {
         btnHeight() {

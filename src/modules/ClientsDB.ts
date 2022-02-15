@@ -62,6 +62,8 @@ export class ClientInfo {
     updated = new FieldInfo("Updated", true);
     localResident = new FieldInfo("Local Resident");
     FIRB = new FieldInfo("FIRB");
+
+    reminders = new FieldInfo("Reminders", true);
 }
 export class Client {
     id = uuidv4();
@@ -79,5 +81,12 @@ export class Client {
     updated = new Date();
     localResident = false;
     FIRB = false;
+
+    reminders: Reminder[] = [];
 }
 
+export interface Reminder {
+    title: string;
+    details: string;
+    date: Date;
+}
