@@ -55,6 +55,7 @@
               if (existsBool) {
                 console.log("Set Clients Path")
                 window.electron.store.set("clientsPath", v)
+                window.electron.ipc.invoke("clients-init")
               }
             },
             rules: [

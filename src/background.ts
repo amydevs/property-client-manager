@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, ipcRenderer } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -70,7 +70,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  init()
+  await init()
   createWindow()
 })
 
@@ -93,26 +93,35 @@ if (isDevelopment) {
 import fs from "fs";
 import axios from "axios"
 import Store from "electron-store";
+import chokidar from "chokidar";
 
 import { ClientsDB } from "@/modules/ClientsDB";
 
-const store = new Store();
+const store = new Store({ watch: true });
 
 let db = {} as ClientsDB;
+let dbWatcher: chokidar.FSWatcher | undefined;
 
-function init() {
-  const clientsPath = store.get("clientsPath") as string
-  if (clientsPath) {
-    const dbPath = path.join(clientsPath, "db.json");
-    db = new ClientsDB(dbPath);
-    fs.watch(dbPath, (eventType, filename) => {
-      db = new ClientsDB(dbPath);
-    })
+async function init() {
+  console.log("initted")
+  if (dbWatcher) {
+    await dbWatcher.close();
   }
+  const clientsPath = store.get("clientsPath") as string;
+  const dbPath = path.join(clientsPath, "db.json");
+  db = new ClientsDB(dbPath);
+  dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
+    console.log(event)
+    db = new ClientsDB(dbPath);
+    win.webContents.send("clients-changed", db);
+  })
 }
 
+ipcMain.handle("clients-init", async (event, arg) => {
+  await init()
+})
+
 ipcMain.on("clients-get", async (event, arg) => {
-  console.log(db)
   event.returnValue = db;
 })
 ipcMain.handle("clients-write", (e, adb:ClientsDB) => {

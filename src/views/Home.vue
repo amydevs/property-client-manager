@@ -34,12 +34,22 @@ export default Vue.extend({
   },
   data: () => {
     return {
+      loaded: true,
       clientsdb: window.electron.clients.get(),
-      loaded: true
+      delFunc: null as null | (() => void),
     }
   },
   mounted() {
     console.log(this.$data.clientsdb)
-  }
+    this.delFunc = window.electron.ipc.receive("clients-changed", (event:any) => {
+      console.log("changed")
+      this.clientsdb = event;
+    });
+  },
+  beforeDestroy() {
+    if (this.delFunc) {
+      this.delFunc();
+    }
+  },
 })
 </script>
