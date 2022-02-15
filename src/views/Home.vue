@@ -12,6 +12,7 @@
       fixed
       right
       bottom
+      color="primary"
       :to="{path: '/client-create'}"
     >
       <v-icon dark>

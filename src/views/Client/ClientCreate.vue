@@ -45,9 +45,10 @@
             left
             bottom
             @click="$router.go(-1)"
+            color="red"
         >
             <v-icon dark>
-                mdi-arrow-left
+                mdi-close
             </v-icon>
         </v-btn>
         <v-btn
@@ -57,6 +58,7 @@
             bottom
             ref="backBtn"
             @click="done"
+            color="green"
         >
             <v-icon dark>
                 mdi-check

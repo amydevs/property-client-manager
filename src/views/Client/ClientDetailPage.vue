@@ -15,6 +15,7 @@
         left
         bottom
         @click="$router.go(-1)"
+        color="primary"
     >
         <v-icon dark>
             mdi-arrow-left
@@ -26,6 +27,7 @@
         right
         bottom
         :to="{path: `/client-create/${client.id}`}"
+        color="primary"
     >
         <v-icon dark>
             mdi-account-edit
