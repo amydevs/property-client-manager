@@ -1,10 +1,11 @@
 <template>
 <v-lazy
     width="100%"
-    class="ma-3 text-left flex-grow-1"
+    class="ma-3 text-left flex-grow-1"    
 >
     <v-card
         style="height: 100%"
+        :to="{path: `/client-create/${client.id}`}"
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar

@@ -75,7 +75,10 @@ export default Vue.extend({
         }
     },
     mounted() {
-       
+        const slugClientFromID = window.electron.clients.get()?.clients.find(c => c.id == this.$route.params.id);
+        if (slugClientFromID) {
+            this.client = slugClientFromID;
+        }
     },
     methods: {
         done() {
