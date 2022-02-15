@@ -33,7 +33,9 @@
 <script lang="ts">
 import ClientComp from '@/components/Client/Client.vue'
 import mdit from "markdown-it";
-const md = new mdit();
+const md = new mdit({
+    linkify: true
+});
 
 import { Client, ClientInfo } from '@/modules/ClientsDB'
 import Vue from 'vue'
