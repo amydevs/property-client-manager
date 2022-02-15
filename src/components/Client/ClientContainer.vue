@@ -12,7 +12,7 @@
             :rules="[() => (length != 0 || 'No Clients Found...')]"
         ></v-text-field>
       </v-card>
-      <ClientComp v-for="(chart, i) in searchFilter" :chart="chart" :key="i" />
+      <ClientComp v-for="(client, i) in searchFilter" :client="client" :key="i" />
     </v-row>
   </v-container>
   </div>
