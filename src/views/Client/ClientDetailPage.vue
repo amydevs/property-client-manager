@@ -4,8 +4,11 @@
         <v-row class="justify-center">
             <client-comp :client="client"/>
         </v-row>
+        
     </v-container>
-
+    <v-container>
+            <div v-html="markdownInfo"></div>
+    </v-container>
     <v-btn
         fab 
         fixed
@@ -32,6 +35,9 @@
 </template>
 <script lang="ts">
 import ClientComp from '@/components/Client/Client.vue'
+import mdit from "markdown-it";
+const md = new mdit();
+
 import { Client, ClientInfo } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
@@ -41,11 +47,14 @@ export default Vue.extend({
     data() {
         return {
             client: window.electron.clients.get()?.clients.find(c => c.id === this.$route.params.id),
+            markdownInfo: "",
             clientInfo: new ClientInfo()
         }
     },
     mounted() {
-        console.log(this.client)
+        if (this.client) {
+            this.markdownInfo = md.render(this.client.notes);
+        }
     },
     methods: {
     },
