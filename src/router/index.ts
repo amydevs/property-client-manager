@@ -13,7 +13,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/client-create',
     name: 'Client Create/Edit',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ClientCreate.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/ClientCreate.vue')
   },
   {
     path: '/settings',

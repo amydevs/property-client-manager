@@ -77,7 +77,6 @@ export default Vue.extend({
     perc: 0,
     items: [
       {icon: 'mdi-home', title:'Home', route:'/'},
-      {icon: 'mdi-tools', title:'Library', route:'/library'},
       {icon: 'mdi-cog', title:'Settings', route:'/settings'}
     ],
   }),
