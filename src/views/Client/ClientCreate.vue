@@ -89,7 +89,10 @@ export default Vue.extend({
 
                     console.log(existingClientIndex)
 
-                    if (existingClientIndex !== -1) tempDb.clients[existingClientIndex] = this.client;
+                    if (existingClientIndex !== -1) {
+                        this.client.updated = new Date();
+                        tempDb.clients[existingClientIndex] = this.client; 
+                    }
                     else tempDb?.clients.push(this.client);
                     
                     if (tempDb) window.electron.clients.write(tempDb)

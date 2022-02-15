@@ -4,7 +4,10 @@
         <v-row class="justify-center mb-1">
             <client-comp :client="client"/>
         </v-row>
-        <v-card class="flex-grow-1" v-html="markdownInfo"></v-card>
+        <v-card class="flex-grow-1">
+            <v-card-title>Notes</v-card-title>
+            <v-card-text v-html="markdownInfo"></v-card-text>
+        </v-card>
     </v-container>
     <v-btn
         fab 
