@@ -11,7 +11,12 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
-    path: '/client-create',
+    path: '/client-detail/:clientId',
+    name: 'Client Details',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Client/ClientDetailPage.vue')
+  },
+  {
+    path: '/client-create/:clientId',
     name: 'Client Create/Edit',
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/ClientCreate.vue')
   },
