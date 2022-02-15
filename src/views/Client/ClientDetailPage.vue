@@ -5,6 +5,29 @@
             <client-comp :client="client"/>
         </v-row>
     </v-container>
+
+    <v-btn
+        fab 
+        fixed
+        left
+        bottom
+        @click="$router.go(-1)"
+    >
+        <v-icon dark>
+            mdi-arrow-left
+        </v-icon>
+    </v-btn>
+    <v-btn
+        fab 
+        fixed
+        right
+        bottom
+        :to="{path: `/client-create/${client.id}`}"
+    >
+        <v-icon dark>
+            mdi-account-edit
+        </v-icon>
+    </v-btn>
 </div>
 </template>
 <script lang="ts">
