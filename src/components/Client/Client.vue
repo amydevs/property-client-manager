@@ -16,7 +16,7 @@
                 :alt="client.fname"
             >
                 <template v-slot:placeholder>
-                    <div class="placeholder primary">
+                    <div class="placeholder primary white--text">
                         {{ client.fname.charAt(0) }}
                     </div>
                 </template>
