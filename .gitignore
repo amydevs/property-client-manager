@@ -24,4 +24,4 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
-test_fold/db.json
+/test_fold*
