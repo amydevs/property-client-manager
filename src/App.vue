@@ -1,5 +1,26 @@
 <template>
-  <v-app>
+  <v-app>    
+    <v-app-bar
+      ref="appbar"
+      app
+      dense
+      fixed
+      clipped-right
+    >
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="$electron.window.handle('minimize')">
+        <v-icon>mdi-window-minimize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('maximize')">
+        <v-icon>mdi-window-maximize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('close')">
+        <v-icon>mdi-window-close</v-icon>
+      </v-btn>
+    </v-app-bar>
+
     <v-navigation-drawer
       v-model="drawer"
       temporary
@@ -25,27 +46,6 @@
           </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
-    
-    <v-app-bar
-      ref="appbar"
-      app
-      dense
-      fixed
-      clipped-right
-    >
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click="$electron.window.handle('minimize')">
-        <v-icon>mdi-window-minimize</v-icon>
-      </v-btn>
-      <v-btn icon @click="$electron.window.handle('maximize')">
-        <v-icon>mdi-window-maximize</v-icon>
-      </v-btn>
-      <v-btn icon @click="$electron.window.handle('close')">
-        <v-icon>mdi-window-close</v-icon>
-      </v-btn>
-    </v-app-bar>
 
     <v-main :style="`height: calc(100vh - ${appbarHeight}px);`" class="">
       <keep-alive include="Home">
@@ -90,6 +90,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+nav * {
+  -webkit-app-region: no-drag;
+}
 .v-toolbar__content {
   * {
     -webkit-app-region: no-drag;
