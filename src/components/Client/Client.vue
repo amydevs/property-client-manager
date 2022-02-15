@@ -9,21 +9,23 @@
     <div class="d-flex" style="height: 100%;">
         <v-avatar
                 class="ma-3 my-auto"
-                size="100"
+                size="60"
             >
             <v-img 
                 :src="`tset.json`" 
                 :alt="client.fname"
             >
                 <template v-slot:placeholder>
-                    <div></div>
+                    <div class="placeholder primary">
+                        {{ client.fname.charAt(0) }}
+                    </div>
                 </template>
             </v-img>
         </v-avatar>
         <div class="flex-grow-1">
             
-            <v-card-title v-text="client.fname"></v-card-title>
-            <v-card-subtitle v-text="client.lname"></v-card-subtitle>
+            <v-card-title v-text="`${client.fname} ${client.lname}`"></v-card-title>
+            <v-card-subtitle v-text="client.email"></v-card-subtitle>
         </div>
     </div>
     </v-card>
@@ -56,3 +58,12 @@ export default Vue.extend({
     }
 })
 </script>
+<style lang="scss" scoped>
+.placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
