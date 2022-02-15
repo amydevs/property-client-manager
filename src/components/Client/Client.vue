@@ -5,7 +5,7 @@
 >
     <v-card
         style="height: 100%"
-        :to="{path: `/client-create/${client.id}`}"
+        :to="{path: `/client-detail/${client.id}`}"
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar
