@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import ClientComp from '@/components/Client.vue'
+  import ClientComp from '@/components/Client/Client.vue'
   import { Client } from '@/modules/ClientsDB'
 
   export default Vue.extend({

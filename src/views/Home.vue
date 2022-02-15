@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ClientContainer from '@/components/ClientContainer.vue'
+import ClientContainer from '@/components/Client/ClientContainer.vue'
 import { Client } from '@/modules/ClientsDB'
 
 export default Vue.extend({
