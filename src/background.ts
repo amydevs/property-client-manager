@@ -99,7 +99,7 @@ import { ClientsDB } from "@/modules/ClientsDB";
 
 const store = new Store({ watch: true });
 
-let db = {} as ClientsDB;
+let db: ClientsDB | null;
 let dbWatcher: chokidar.FSWatcher | undefined;
 
 async function init() {

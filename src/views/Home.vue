@@ -6,7 +6,7 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    <ClientContainer :clients="clientsdb.clients" />
+    <ClientContainer v-if="clientsdb" :clients="clientsdb.clients" />
     <v-btn
       fab 
       fixed

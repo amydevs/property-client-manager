@@ -19,7 +19,7 @@ declare global {
   interface Window {
     electron: {
       clients: {
-        get: () => ClientsDB
+        get: () => ClientsDB | null
         write: (e: ClientsDB) => void
       },
       window: {

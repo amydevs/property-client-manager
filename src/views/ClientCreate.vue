@@ -67,8 +67,8 @@ export default Vue.extend({
     methods: {
         done() {
             const tempDb = window.electron.clients.get()
-            tempDb.clients.push(this.client)
-            window.electron.clients.write(tempDb)
+            tempDb?.clients.push(this.client)
+            if (tempDb) window.electron.clients.write(tempDb)
             this.$router.go(-1)
         }
     },
