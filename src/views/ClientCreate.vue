@@ -5,16 +5,26 @@
           <v-list-item :key="i">
             <v-list-item-content>
                 <v-list-item-title>{{ clientInfo[key].name }}</v-list-item-title>
-
-                <v-text-field
-                    v-if="typeof value == 'string'"
-                    :placeholder="''"
-                    class="mt-3"
-                    outlined
-                    :hint="''"
-                    v-model="client[key]"
-                    hide-details="auto"
-                ></v-text-field>
+                <div v-if="typeof value == 'string'">
+                    <v-textarea
+                        v-if="clientInfo[key].type == 'textbox'"
+                        class="mt-3"
+                        v-model="client[key]"
+                        hint=""
+                        outlined
+                        hide-details="auto"
+                    ></v-textarea>
+                    <v-text-field
+                        v-else
+                        :placeholder="''"
+                        class="mt-3"
+                        outlined
+                        :hint="''"
+                        v-model="client[key]"
+                        hide-details="auto"
+                    ></v-text-field>
+                    
+                </div>
             </v-list-item-content>
             <v-switch
                 v-if="typeof value == 'boolean'"

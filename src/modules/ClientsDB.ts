@@ -38,9 +38,11 @@ export class ClientsDB {
 export class FieldInfo {
     name: string;
     hidden?: boolean;
-    constructor(name: string, hidden: boolean = false) {
+    type?: "textbox";
+    constructor(name: string, hidden: boolean = false, type = undefined) {
         this.name = name;
         this.hidden = hidden;
+        this.type = type;
     }
 }
 
@@ -55,7 +57,7 @@ export class ClientInfo {
     state = new FieldInfo("State");
     zip = new FieldInfo("Zip Code");
     country = new FieldInfo("Country");
-    notes = new FieldInfo("Notes");
+    notes = { name: "Notes", type: "textbox" } as FieldInfo;
     created = new FieldInfo("Created", true);
     updated = new FieldInfo("Updated", true);
     localResident = new FieldInfo("Local Resident");
