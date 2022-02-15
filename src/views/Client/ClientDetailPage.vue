@@ -1,13 +1,10 @@
 <template>
 <div>
     <v-container>
-        <v-row class="justify-center">
+        <v-row class="justify-center mb-1">
             <client-comp :client="client"/>
         </v-row>
-        
-    </v-container>
-    <v-container>
-            <div v-html="markdownInfo"></div>
+        <v-card class="flex-grow-1" v-html="markdownInfo"></v-card>
     </v-container>
     <v-btn
         fab 
