@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, dialog, ipcRenderer } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -41,6 +41,13 @@ async function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+
+  win.webContents.on('will-navigate', (e, url) => {
+    if(url != win.webContents.getURL()) {
+      e.preventDefault()
+      shell.openExternal(url);
+    }
+  })
 }
 
 // Quit when all windows are closed.
