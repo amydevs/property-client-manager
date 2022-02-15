@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <v-form
+        ref="form"
+        lazy-validation
+    >
         <v-list>
         <template v-for="([key, value], i) in clientEntries">
           <v-list-item :key="i">
@@ -59,7 +62,7 @@
                 mdi-check
             </v-icon>
         </v-btn>
-    </div>
+    </v-form>
 </template>
 <script lang="ts">
 import { Client, ClientInfo } from '@/modules/ClientsDB'
@@ -76,10 +79,12 @@ export default Vue.extend({
     },
     methods: {
         done() {
-            const tempDb = window.electron.clients.get()
-            tempDb?.clients.push(this.client)
-            if (tempDb) window.electron.clients.write(tempDb)
-            this.$router.go(-1)
+            if ((this.$refs.form as any).validate()) {
+                const tempDb = window.electron.clients.get()
+                tempDb?.clients.push(this.client)
+                if (tempDb) window.electron.clients.write(tempDb)
+                this.$router.go(-1)
+            }
         }
     },
     computed: {
