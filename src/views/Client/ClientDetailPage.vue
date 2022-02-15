@@ -31,6 +31,12 @@
             mdi-account-edit
         </v-icon>
     </v-btn>
+
+     <v-footer app bottom fixed padless class="px-1 text-caption">
+        Updated: {{ new Date(client.updated).toLocaleString() }}
+        <v-spacer />
+        Created: {{ new Date(client.created).toLocaleString() }}
+     </v-footer>
 </div>
 </template>
 <script lang="ts">
