@@ -12,7 +12,7 @@
       fixed
       right
       bottom
-      :to="{name: 'ClientCreate'}"
+      :to="{path: '/client-create'}"
     >
       <v-icon dark>
           mdi-plus
