@@ -81,6 +81,21 @@ export default Vue.extend({
             this.markdownInfo = md.render(this.client.notes);
         }
     },
+    watch: {
+        client: {
+            handler(newValue, oldValue) {
+                const tempDb = window.electron.clients.get();
+                let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
+                
+
+                if (tempDb && this.client && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
+                    tempDb.clients[existingClientIndex] = this.client;
+                    window.electron.clients.write(tempDb);
+                }
+            },
+            deep: true
+        }
+    },
     computed: {
         btnHeight() {
             if (!this.$refs.backBtn) return 56
