@@ -10,7 +10,9 @@
 
                     </v-list-item-content>
                     
-                    <v-btn v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)" dense color="orange">Edit</v-btn>
+                    <v-btn icon v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)" dense>
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
                 </v-list-item>
             </ReminderEditor>
             <v-divider :key="`divfor-${i}`"/>
