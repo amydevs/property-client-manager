@@ -3,7 +3,7 @@
     <v-list>
         <template v-for="(reminder, i) in sortedReminders">
             <ReminderEditor v-model="sortedReminders[i]" v-slot="slotProp" :key="i">
-                <v-list-item>
+                <v-list-item v-if="!slotProp.opened">
                     <v-list-item-content>
                         <v-list-item-title>{{reminder.title}}</v-list-item-title>
                         <v-list-item-subtitle>{{reminder.details}}</v-list-item-subtitle>

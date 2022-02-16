@@ -4,10 +4,10 @@
         :opened="createNewReminderOpen" 
         :toggle="(e) => { createNewReminderOpen = e }">
     </slot>
-    <v-list v-if="createNewReminderOpen">
-        <v-list-item> <v-text-field label="Title" hide-details="auto" outlined dense v-model="newReminder.title"/></v-list-item>
-        <v-list-item> <v-textarea label="Details" hide-details="auto" outlined dense rows="2" v-model="newReminder.details"/></v-list-item>
-        <v-list-item>
+    <div v-if="createNewReminderOpen">
+        <v-container> <v-text-field label="Title" hide-details="auto" outlined dense v-model="newReminder.title"/></v-container>
+        <v-container> <v-textarea label="Details" hide-details="auto" outlined dense rows="2" v-model="newReminder.details"/></v-container>
+        <v-container>
         <v-menu
             ref="menu"
             v-model="dateMenu"
@@ -34,8 +34,8 @@
                 v-model="tempDate"
             ></v-date-picker>
         </v-menu>
-        </v-list-item>
-        <v-list-item>
+        </v-container>
+        <v-container>
             <v-menu
                 ref="timeMenu"
                 v-model="timeMenu"
@@ -66,11 +66,15 @@
                     @click:minute="$refs.timeMenu.save(tempTime)"
                 ></v-time-picker>
             </v-menu>
-        </v-list-item>
-        <v-list-item>
+        </v-container>
+        <v-container>
+            <v-btn style="width: 100%" dense @click="createNewReminderOpen = false" color="red">Close</v-btn>
+        </v-container>
+        <v-container>
             <v-btn style="width: 100%" dense @click="addReminder()" color="green">Confirm</v-btn>
-        </v-list-item>
-    </v-list>
+        </v-container>
+        
+    </div>
 </div>
 </template>
 <script lang="ts">
