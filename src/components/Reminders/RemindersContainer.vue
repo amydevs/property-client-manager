@@ -7,10 +7,11 @@
                     <v-list-item-content>
                         <v-list-item-title>{{reminder.title}}</v-list-item-title>
                         <v-list-item-subtitle>{{reminder.details}}</v-list-item-subtitle>
+                        <div v-if="reminder.details.length !== 0" v-html="md.render(reminder.details)"></div>
 
                     </v-list-item-content>
                     
-                    <v-btn icon v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)" dense>
+                    <v-btn icon v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                 </v-list-item>
@@ -33,6 +34,8 @@ import ReminderEditor from '@/components/Reminders/ReminderEditor.vue';
 
 import { Reminder, Client } from '@/modules/ClientsDB'
 import { format, parseISO, parse } from 'date-fns'
+import mdit from "markdown-it";
+
 
 import Vue from 'vue'
 export default Vue.extend({
@@ -57,7 +60,11 @@ export default Vue.extend({
             tempDate: "",
             tempTime: "",
             dateMenu: false,
-            timeMenu: false
+            timeMenu: false,
+
+            md: new mdit({
+                linkify: true
+            })
         }
     },
     mounted() {
