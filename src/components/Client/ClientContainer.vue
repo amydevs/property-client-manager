@@ -59,7 +59,7 @@
       searchFilter(): Client[] {
         const len = this.search.length
         
-        var returnVal = [...this.clients]
+        var returnVal = this.clients
         const getLowestTimeOr0 = (reminders: Reminder[], inf: boolean = false) => {
           const val = inf ? Infinity : 0;
           return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date ).getTime();
