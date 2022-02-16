@@ -14,6 +14,9 @@
                     <v-btn icon v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
+                    <v-btn icon @click="remove(sortedReminders[i])">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
                 </v-list-item>
             </ReminderEditor>
             <v-divider :key="`divfor-${i}`"/>
@@ -48,6 +51,9 @@ export default Vue.extend({
         }
     },
     methods: {
+        remove(e: Reminder) {
+            this.value.reminders.splice(this.value.reminders.indexOf(e), 1)
+        },
         addReminder() {
             this.value?.reminders.push(this.newReminder)
         },
