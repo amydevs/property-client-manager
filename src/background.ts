@@ -92,7 +92,6 @@ app.on('ready', async () => {
       throw new Error("Path santization blocked")
     }
     catch (error) {
-      console.error(error)
       return callback("404")
     }
   })
