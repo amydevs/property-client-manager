@@ -81,7 +81,9 @@ app.on('ready', async () => {
   }
   await init()
   protocol.registerFileProtocol('filer', (request, callback) => {
-    const url = request.url.replace('filer://', '')
+    const urlParsed = new URL(request.url);
+    var url = request.url.replace('filer://', '') as string;
+    url = url.substring(0, url.length - urlParsed.search.length)
     try {
       if (db) {
         const rel = path.relative(db.clientsPath, url);
@@ -92,6 +94,7 @@ app.on('ready', async () => {
       throw new Error("Path santization blocked")
     }
     catch (error) {
+      if (urlParsed.searchParams.get("noerror") !== "1")
       return callback("404")
     }
   })
