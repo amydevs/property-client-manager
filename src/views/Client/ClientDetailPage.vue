@@ -49,7 +49,7 @@
 </template>
 <script lang="ts">
 import ClientComp from '@/components/Client/Client.vue'
-import ClientReminders from '@/components/Client/Reminders.vue'
+import ClientReminders from '@/components/Reminders/RemindersContainer.vue'
 
 import mdit from "markdown-it";
 const md = new mdit({

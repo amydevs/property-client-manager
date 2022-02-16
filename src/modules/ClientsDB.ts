@@ -85,8 +85,9 @@ export class Client {
     reminders: Reminder[] = [];
 }
 
-export interface Reminder {
-    title: string;
-    details: string;
-    date: Date | string;
+export class Reminder {
+    id = uuidv4();
+    title = "";
+    details = "";
+    date = new Date();
 }

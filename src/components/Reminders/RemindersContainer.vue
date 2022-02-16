@@ -8,6 +8,8 @@
                     <v-list-item-subtitle>{{reminder.details}}</v-list-item-subtitle>
 
                 </v-list-item-content>
+                <!-- <ReminderEditor v-model="sortedReminders[i]" /> -->
+                <!-- <v-btn style="width: 100%" dense @click="" color="orange">Edit</v-btn> -->
             </v-list-item>
             <v-divider :key="`divfor-${i}`"/>
         </template>
@@ -19,15 +21,13 @@
                 <v-container> <v-textarea label="Details" hide-details="auto" outlined dense rows="2" v-model="newReminder.details"/></v-container>
                 <v-container>
                 <v-menu
-                    ref="menu"
+                    ref="dateMenu"
                     v-model="dateMenu"
                     :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="tempDate"
                     transition="scale-transition"
                     offset-y
                     max-width="290px"
-                    min-width="290px"
+                    min-width="auto"
                 >
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -48,7 +48,7 @@
                 </v-container>
                 <v-container>
                     <v-menu
-                        ref="menu"
+                        ref="timeMenu"
                         v-model="timeMenu"
                         :close-on-content-click="false"
                         :nudge-right="40"
@@ -71,8 +71,10 @@
                         ></v-text-field>
                     </template>
                         <v-time-picker
+                            v-if="timeMenu"
                             v-model="tempTime"
                             ampm-in-title
+                            @click:minute="$refs.timeMenu.save(tempTime)"
                         ></v-time-picker>
                     </v-menu>
                 </v-container>
@@ -81,18 +83,23 @@
                 </v-container>
             </div>
             <v-container>
-                <v-btn style="width: 100%" dense @click="createNewReminderOpen ? addReminder() : createNewReminderOpen = true" color="green">Add Reminder</v-btn>
+                <v-btn style="width: 100%" dense @click="createNewReminderOpen ? addReminder() : createNewReminderOpen = true" color="green">Create Reminder</v-btn>
             </v-container>
         </v-form>
     </v-container>
 </div>
 </template>
 <script lang="ts">
+import ReminderEditor from '@/components/Reminders/ReminderEditor.vue';
+
 import { Reminder, Client } from '@/modules/ClientsDB'
 import { format, parseISO, parse } from 'date-fns'
 
 import Vue from 'vue'
 export default Vue.extend({
+    components: {
+        ReminderEditor
+    },
     props: {
         value: {
             type: Object as () => Client
@@ -101,27 +108,13 @@ export default Vue.extend({
     methods: {
         addReminder() {
             this.value?.reminders.push(this.newReminder)
-            const tempDb = window.electron.clients.get();
-            let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
-            
-
-            if (tempDb && this.value && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
-                tempDb.clients[existingClientIndex] = this.value;
-                window.electron.clients.write(tempDb);
-            }
-            this.$emit('input', this.value)
         },
     },
     data() {
         return {
             createNewReminderOpen: false,
-            newReminder: {
-                title: "",
-                details: "",
-                date: new Date()
-            } as Reminder,
+            newReminder: new Reminder(),
 
-            menu1: false,
             tempDate: "",
             tempTime: "",
             dateMenu: false,
@@ -138,6 +131,20 @@ export default Vue.extend({
         }
     },
     watch: {
+        value: {
+            handler(newValue, oldValue) {
+                const tempDb = window.electron.clients.get();
+                let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
+                
+
+                if (tempDb && this.value && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
+                    tempDb.clients[existingClientIndex] = this.value;
+                    window.electron.clients.write(tempDb);
+                }
+                this.$emit('input', this.value)
+            },
+            deep: true
+        },
         tempDate(e: string) {
             const tmpDate = parse(e, "yyyy-MM-dd" ,new Date());
             const actualDate = new Date(this.newReminder.date);
@@ -149,7 +156,9 @@ export default Vue.extend({
         tempTime(e: string) {
             const tmpDate = parse(e, "HH:mm" ,new Date());
             const actualDate = new Date(this.newReminder.date);
-            actualDate.setTime(tmpDate.getTime());
+            actualDate.setSeconds(tmpDate.getSeconds());
+            actualDate.setMinutes(tmpDate.getMinutes());
+            actualDate.setHours(tmpDate.getHours());
             this.newReminder.date = actualDate
         }
     }
