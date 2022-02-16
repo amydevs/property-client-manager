@@ -25,7 +25,7 @@
     <v-container>
         <ReminderEditor v-model="cleanReminder" v-slot="slotProp">
             <v-btn style="width: 100%" dense v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)"
-                color="green">
+                color="primary">
                 Create Reminder
             </v-btn>
         </ReminderEditor>
