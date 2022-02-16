@@ -26,7 +26,9 @@
         <div class="flex-grow-1">
             
             <v-card-title v-text="`${client.fname} ${client.lname}`"></v-card-title>
-            <v-card-subtitle v-text="client.email"></v-card-subtitle>
+            <v-card-subtitle v-text="
+                client.reminders.length === 0 ? 'No Reminders' : client.reminders.reduce((a1, b1) => a1.date.getTime() < b1.date.getTime() ? a1 : b1 ).date
+            "></v-card-subtitle>
         </div>
     </div>
     </v-card>

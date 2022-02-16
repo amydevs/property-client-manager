@@ -21,7 +21,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import ClientComp from '@/components/Client/Client.vue'
-  import { Client } from '@/modules/ClientsDB'
+  import { Client, Reminder } from '@/modules/ClientsDB'
 
   export default Vue.extend({
     name: 'ChartsContainer',    
@@ -40,11 +40,20 @@
       }
     },
     computed: {
-      searchFilter() {
+      searchFilter(): Client[] {
         const len = this.search.length as number
         
-        var returnVal = this.clients as Client[]
-        
+        var returnVal = this.clients
+        const getLowestTimeOr0 = (reminders: Reminder[], inf: boolean = false) => {
+          const val = inf ? Infinity : 0;
+          return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => a1.date.getTime() < b1.date.getTime() ? a1 : b1 ).date ).getTime();
+        }
+        this.clients.sort((a,b) => {
+          return getLowestTimeOr0(a.reminders, true)
+          - 
+          getLowestTimeOr0(b.reminders, true);
+        })
+
         const lowercaseSearch = this.search.toLowerCase()
         returnVal = returnVal.filter(e => {
           var searchBool = true
