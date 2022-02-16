@@ -83,7 +83,13 @@ app.on('ready', async () => {
   protocol.registerFileProtocol('filer', (request, callback) => {
     const url = request.url.replace('filer://', '')
     try {
-      return callback(path.resolve(url))
+      if (db) {
+        const rel = path.relative(db.clientsPath, url);
+        if (!rel.startsWith('../') && rel !== '..') {
+          return callback(path.resolve(url))
+        }
+      }
+      throw new Error("Path santization blocked")
     }
     catch (error) {
       console.error(error)
