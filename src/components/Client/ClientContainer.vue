@@ -19,6 +19,8 @@
             label="Filter By"
             hide-details="auto"
             outlined
+            :append-outer-icon="!sortReverse ? `mdi-arrow-down` : `mdi-arrow-up`"
+            @click:append-outer="sortReverse = !sortReverse"
           ></v-select>
         </div>
       </v-card>
@@ -27,7 +29,6 @@
   </v-container>
   </div>
 </template>
-
 <script lang="ts">
   import Vue from 'vue'
   import ClientComp from '@/components/Client/Client.vue'
@@ -41,7 +42,8 @@
       return {
         search: '',
         filters: filters,
-        filter: filters[0] as typeof filters[number],
+        filter: filters[1] as typeof filters[number],
+        sortReverse: false,
         length: 1,
       }
     },
@@ -55,9 +57,9 @@
     },
     computed: {
       searchFilter(): Client[] {
-        const len = this.search.length as number
+        const len = this.search.length
         
-        var returnVal = this.clients
+        var returnVal = [...this.clients]
         const getLowestTimeOr0 = (reminders: Reminder[], inf: boolean = false) => {
           const val = inf ? Infinity : 0;
           return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date ).getTime();
@@ -73,25 +75,23 @@
             break;
           case "First Name":
             returnVal.sort((a,b) => {
-              if(a.fname < b.fname) { return -1; }
-              if(a.fname > b.fname) { return 1; }
-              return 0;
+              return a.fname.localeCompare(b.fname)
             })
             break;
           case "Last Name":
             returnVal.sort((a,b) => {
-              if(a.lname < b.lname) { return -1; }
-              if(a.lname > b.lname) { return 1; }
-              return 0;
+              return a.lname.localeCompare(b.lname)
             })
             break;
           case "Email":
             returnVal.sort((a,b) => {
-              if(a.email < b.email) { return -1; }
-              if(a.email > b.email) { return 1; }
-              return 0;
+              return a.email.localeCompare(b.email)
             })
             break;
+        }
+
+        if (this.sortReverse) {
+          returnVal.reverse()
         }
         
 
