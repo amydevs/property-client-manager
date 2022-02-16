@@ -25,9 +25,9 @@
         </v-avatar>
         <div class="flex-grow-1">
             
-            <v-card-title v-text="`${client.fname} ${client.lname}`"></v-card-title>
+            <v-card-title v-text="(new Boolean(client.fname.length) | new Boolean(client.lname.length)) ? `${client.fname} ${client.lname}` : `No Name`"></v-card-title>
             <v-card-subtitle v-text="
-                client.reminders.length === 0 ? 'No Reminders' : new Date(client.reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date)
+                client.reminders.length === 0 ? 'No Reminders' : new Date(client.reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date).toLocaleString()
             "></v-card-subtitle>
         </div>
     </div>
