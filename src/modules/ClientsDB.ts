@@ -1,10 +1,12 @@
 import fs from "fs";
+import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 
 export class ClientsDB {
+    clientsPath = "";
     jsonPath: string = "";
     clients: Client[] = [];
-    constructor(jsonPathOrInst: string | ClientsDB) {
+    constructor(jsonPathOrInst: string | ClientsDB, clientsPath: string | undefined = undefined) {
         if (typeof jsonPathOrInst == "string") {
             this.jsonPath = jsonPathOrInst;
             try {
@@ -19,9 +21,17 @@ export class ClientsDB {
         else {
             Object.assign(this, jsonPathOrInst);
         }
+
+        if (typeof clientsPath === "string") {
+            this.clientsPath = clientsPath;
+        }
+        else {
+            this.clientsPath = path.join(this.jsonPath, "..");
+        }
     }
     toJson(key:string, value:any) {
         switch (key) {
+            case "clientsPath":
             case "jsonPath":
                 return undefined;
         }
