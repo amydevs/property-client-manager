@@ -13,7 +13,7 @@
                 size="60"
             >
             <v-img 
-                :src="`tset.json`" 
+                :src="imgPath" 
                 :alt="client.fname"
             >
                 <template v-slot:placeholder>
@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts">
+import path from "path";
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Client } from '@/modules/ClientsDB'
 
@@ -46,12 +47,13 @@ export default Vue.extend({
         value: Number
     },
     mounted() {
+        this.imgPath = `filer://${path.join(window.electron.store.get("clientsPath") as string, this.client.id, "profile.png")}`
     },
     components: {
     },
     data: () => {
         return {
-
+            imgPath: "unknown.png"
         }
     },
     methods: {

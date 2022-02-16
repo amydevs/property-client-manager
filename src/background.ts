@@ -80,6 +80,16 @@ app.on('ready', async () => {
     }
   }
   await init()
+  protocol.registerFileProtocol('filer', (request, callback) => {
+    const url = request.url.replace('filer://', '')
+    try {
+      return callback(path.resolve(url))
+    }
+    catch (error) {
+      console.error(error)
+      return callback("404")
+    }
+  })
   createWindow()
 })
 
