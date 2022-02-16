@@ -8,16 +8,11 @@
             <v-card-title>Notes</v-card-title>
             <v-card-text v-html="markdownInfo"></v-card-text>
         </v-card>
+
         <v-card class="flex-grow-1 mb-3">
             <v-card-title>Reminders</v-card-title>
-            <v-card-text>
-                <v-form>
-                    <v-text-field v-model="newReminder.title"></v-text-field>
-                    <v-textarea v-model="newReminder.details"></v-textarea>
-                    <v-btn @click="addReminder">Add</v-btn>
-                </v-form>
-                
-            </v-card-text>
+            <v-divider />
+            <ClientReminders v-model="client"/>
         </v-card>
     </v-container>
     <v-btn
@@ -54,22 +49,26 @@
 </template>
 <script lang="ts">
 import ClientComp from '@/components/Client/Client.vue'
+import ClientReminders from '@/components/Client/Reminders.vue'
+
 import mdit from "markdown-it";
 const md = new mdit({
     linkify: true
 });
 
-import { Client, ClientInfo, Reminder } from '@/modules/ClientsDB'
+import { ClientInfo, Reminder } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
     components: {
-        ClientComp
+        ClientComp,
+        ClientReminders
     },
     data() {
         return {
-            client: window.electron.clients.get()?.clients.find(c => c.id === this.$route.params.id),
+            client: window.electron.clients.get()?.clients.find( (c) => c.id === this.$route.params.id),
             markdownInfo: "",
             clientInfo: new ClientInfo(),
+            createNewReminderOpen: false,
             newReminder: {
                 title: "",
                 details: "",
@@ -80,18 +79,6 @@ export default Vue.extend({
     mounted() {
         if (this.client) {
             this.markdownInfo = md.render(this.client.notes);
-        }
-    },
-    methods: {
-        addReminder() {
-            const tempDb = window.electron.clients.get();
-            this.client?.reminders.push(this.newReminder);
-
-            let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.client?.id);
-
-            if (tempDb && existingClientIndex !== -1) {
-                tempDb[existingClientIndex] = this.client;
-            }
         }
     },
     computed: {

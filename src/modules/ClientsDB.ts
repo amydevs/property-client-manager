@@ -88,5 +88,5 @@ export class Client {
 export interface Reminder {
     title: string;
     details: string;
-    date: Date;
+    date: Date | string;
 }
