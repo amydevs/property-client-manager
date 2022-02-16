@@ -11,6 +11,16 @@
             hide-details="auto"            
             :rules="[() => (length != 0 || 'No Clients Found...')]"
         ></v-text-field>
+        <div class="d-flex justify-space-between mt-3">
+          <v-select
+            v-model="filter"
+            dense
+            :items="filters"
+            label="Filter By"
+            hide-details="auto"
+            outlined
+          ></v-select>
+        </div>
       </v-card>
       <ClientComp v-for="(client, i) in searchFilter" :client="client" :key="i" />
     </v-row>
@@ -23,11 +33,15 @@
   import ClientComp from '@/components/Client/Client.vue'
   import { Client, Reminder } from '@/modules/ClientsDB'
 
+  const filters = ["Date" , "First Name", "Last Name", "Email"] as const;
+
   export default Vue.extend({
     name: 'ChartsContainer',    
     data() {
       return {
         search: '',
+        filters: filters,
+        filter: "Date" as typeof filters[number],
         length: 1,
       }
     },
@@ -48,11 +62,38 @@
           const val = inf ? Infinity : 0;
           return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => a1.date.getTime() < b1.date.getTime() ? a1 : b1 ).date ).getTime();
         }
-        this.clients.sort((a,b) => {
-          return getLowestTimeOr0(a.reminders, true)
-          - 
-          getLowestTimeOr0(b.reminders, true);
-        })
+
+        switch (this.filter) {
+          case "Date":
+            returnVal.sort((a,b) => {
+              return getLowestTimeOr0(a.reminders, true)
+              - 
+              getLowestTimeOr0(b.reminders, true);
+            })
+            break;
+          case "First Name":
+            returnVal.sort((a,b) => {
+              if(a.fname < b.fname) { return -1; }
+              if(a.fname > b.fname) { return 1; }
+              return 0;
+            })
+            break;
+          case "Last Name":
+            returnVal.sort((a,b) => {
+              if(a.lname < b.lname) { return -1; }
+              if(a.lname > b.lname) { return 1; }
+              return 0;
+            })
+            break;
+          case "Email":
+            returnVal.sort((a,b) => {
+              if(a.email < b.email) { return -1; }
+              if(a.email > b.email) { return 1; }
+              return 0;
+            })
+            break;
+        }
+        
 
         const lowercaseSearch = this.search.toLowerCase()
         returnVal = returnVal.filter(e => {
