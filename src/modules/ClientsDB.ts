@@ -2,11 +2,9 @@ import fs from "fs";
 import { v4 as uuidv4 } from 'uuid';
 
 export class ClientsDB {
-    jsonPath: string;
-    clients: Client[];
+    jsonPath: string = "";
+    clients: Client[] = [];
     constructor(jsonPathOrInst: string | ClientsDB) {
-        this.clients = [];
-        this.jsonPath = "";
         if (typeof jsonPathOrInst == "string") {
             this.jsonPath = jsonPathOrInst;
             try {
