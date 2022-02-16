@@ -25,7 +25,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import ClientContainer from '@/components/Client/ClientContainer.vue'
-import { Client } from '@/modules/ClientsDB'
+import { Client, ClientsDB } from '@/modules/ClientsDB'
 
 export default Vue.extend({
   name: 'Home',
@@ -36,16 +36,15 @@ export default Vue.extend({
   data: () => {
     return {
       loaded: true,
-      clientsdb: window.electron.clients.get(),
       delFunc: null as null | (() => void),
     }
   },
+  computed: {
+    clientsdb(): ClientsDB | null {
+      return this.$store.state.Clients.value;
+    }
+  },
   mounted() {
-    console.log(this.$data.clientsdb)
-    this.delFunc = window.electron.ipc.receive("clients-changed", (event:any) => {
-      console.log("changed")
-      this.clientsdb = event;
-    });
   },
   beforeDestroy() {
     if (this.delFunc) {

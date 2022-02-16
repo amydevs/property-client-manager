@@ -84,6 +84,14 @@ export default Vue.extend({
     currentRouteName() {
       return this.$route.name;
     }
+  },
+  watch: {
+    '$store.state.Clients.value': {
+        handler(newValue, oldValue) {
+          window.electron.clients.write(newValue);
+        },
+        deep: true
+    }
   }
 });
 </script>
