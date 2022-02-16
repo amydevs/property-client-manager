@@ -13,9 +13,9 @@
         ></v-text-field>
         <div class="d-flex justify-space-between mt-3">
           <v-select
-            v-model="filter"
+            v-model="sortBy"
             dense
-            :items="filters"
+            :items="sorts"
             label="Filter By"
             hide-details="auto"
             outlined
@@ -34,15 +34,15 @@
   import ClientComp from '@/components/Client/Client.vue'
   import { Client, Reminder } from '@/modules/ClientsDB'
 
-  const filters = ["Date of Next Appointment" , "First Name", "Last Name", "Email"] as const;
+  const sorts = ["Date of Next Appointment" , "First Name", "Last Name", "Email"] as const;
 
   export default Vue.extend({
     name: 'ChartsContainer',    
     data() {
       return {
         search: '',
-        filters: filters,
-        filter: filters[1] as typeof filters[number],
+        sorts: sorts,
+        sortBy: sorts[1] as typeof sorts[number],
         sortReverse: false,
         length: 1,
       }
@@ -65,7 +65,7 @@
           return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date ).getTime();
         }
 
-        switch (this.filter) {
+        switch (this.sortBy) {
           case "Date of Next Appointment":
             returnVal.sort((a,b) => {
               return getLowestTimeOr0(a.reminders, true)
