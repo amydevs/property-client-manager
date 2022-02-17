@@ -166,7 +166,7 @@ function scheduleAllInDb(db:ClientsDB) {
         console.log(`Shown reminder for ${client.fname} ${client.lname}`)
         notif = new Notification({title: reminder.title, body: reminder.details});
         notif.on("click", (e) => {
-          win.webContents.send("router-push", { path: "/client-detail", params: { id : client.id } } as RawLocation);
+          win.webContents.send("router-push", { path: `/client-detail/${client.id}` } as RawLocation);
         })
         notif.show();
       })
