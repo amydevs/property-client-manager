@@ -37,6 +37,7 @@
         <template v-slot:activator>
             <v-btn
                 v-model="spdDial"
+                :to="{path: `/client-create/${client.id}`}"
                 fab
                 color="primary"
             >
