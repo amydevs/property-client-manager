@@ -85,20 +85,26 @@ export default Vue.extend({
     methods: {
         done() {
             if ((this.$refs.form as any).validate()) {
-                const tempDb = window.electron.clients.get()
-                if (tempDb) {
-                    let existingClientIndex = tempDb.clients.findIndex((e) => e.id === this.client.id);
-
-                    console.log(existingClientIndex)
-
+                const tempDbClients = this.$store.state.Clients.value.clients as Client[]
+                if (tempDbClients) {
+                    const existingClientIndex = tempDbClients.findIndex((e) => e.id === this.client.id);
                     if (existingClientIndex !== -1) {
                         this.client.updated = new Date();
-                        tempDb.clients[existingClientIndex] = this.client; 
+                        tempDbClients[existingClientIndex] = this.client; 
                     }
-                    else tempDb?.clients.push(this.client);
+                    else tempDbClients.push(this.client);
+                    // let existingClientIndex = tempDb.clients.
+
+                    // console.log(existingClientIndex)
+
+                    // if (existingClientIndex !== -1) {
+                    //     this.client.updated = new Date();
+                    //     tempDb.clients[existingClientIndex] = this.client; 
+                    // }
+                    // else tempDb?.clients.push(this.client);
                     
-                    if (tempDb) window.electron.clients.write(tempDb)
-                    this.$router.go(-1)
+                    // if (tempDb) window.electron.clients.write(tempDb)
+                    // this.$router.go(-1)
                 }
             }
         }
