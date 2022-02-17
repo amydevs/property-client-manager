@@ -121,8 +121,9 @@ import fs from "fs";
 import axios from "axios"
 import Store from "electron-store";
 import chokidar from "chokidar";
+import schedule from "node-schedule";
 
-import { ClientsDB } from "@/modules/ClientsDB";
+import { Client, ClientsDB } from "@/modules/ClientsDB";
 
 const store = new Store({ watch: true });
 
@@ -137,11 +138,26 @@ async function init() {
   const clientsPath = store.get("clientsPath") as string;
   const dbPath = path.join(clientsPath, "db.json");
   db = new ClientsDB(dbPath);
+  scheduleAllInDb(db);
   dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
     console.log(event)
     db = new ClientsDB(dbPath);
+    scheduleAllInDb(db);
     win.webContents.send("clients-changed", db);
   })
+}
+
+function scheduleAllInDb(db:ClientsDB) {
+  for (const [name, job] of Object.entries(schedule.scheduledJobs)) {
+    job.cancel();
+  }
+  for (const client of db.clients) {
+    for (const reminder of client.reminders) {
+      schedule.scheduleJob(new Date(reminder.date), ()=> {
+        console.log("hit", client.fname)
+      })
+    }
+  }
 }
 
 ipcMain.handle("clients-init", async (event, arg) => {
