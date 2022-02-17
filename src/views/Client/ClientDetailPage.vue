@@ -56,7 +56,7 @@ const md = new mdit({
     linkify: true
 });
 
-import { ClientInfo, Reminder } from '@/modules/ClientsDB'
+import { Client, ClientInfo, Reminder } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
     components: {
@@ -82,22 +82,27 @@ export default Vue.extend({
         }
     },
     watch: {
-        client: {
+        clonedClient: {
             handler(newValue, oldValue) {
-                const tempDb = window.electron.clients.get();
-                let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
-                
+                if (newValue !== oldValue) {
+                    const tempDb = window.electron.clients.get();
+                    let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
+                    
 
-                if (tempDb && this.client && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
-                    tempDb.clients[existingClientIndex] = this.client;
-                    window.electron.clients.write(tempDb);
-                }
+                    if (tempDb && this.client && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
+                        tempDb.clients[existingClientIndex] = this.client;
+                        window.electron.clients.write(tempDb);
+                    }
+                }  
             },
             deep: true
         }
     },
     computed: {
-        btnHeight() {
+        clonedClient(): string {
+            return JSON.stringify(this.client);
+        },
+        btnHeight(): number {
             if (!this.$refs.backBtn) return 56
             return (this.$refs.backBtn as any).$el.offsetHeight as number;
         }
