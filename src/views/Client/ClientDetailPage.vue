@@ -5,6 +5,24 @@
             <client-comp :client="client"/>
         </v-row>
         <v-card class="flex-grow-1 mb-3">
+            <v-card-title>Details</v-card-title>
+            <v-divider />
+            <v-list>
+                <template v-for="([key, value], i) in details">
+                        <v-list-item :key="i">
+                            <v-list-item-content>
+                                <v-list-item-title>{{clientInfo[key].name}}</v-list-item-title>
+                                <v-list-item-subtitle v-if="typeof value === 'boolean'">{{value ? 'Yes' : 'No'}}</v-list-item-subtitle>
+                                <v-list-item-subtitle v-else-if="typeof value === 'string'">{{ value.length === 0 ? "No Value" : value }}</v-list-item-subtitle>
+                            </v-list-item-content>
+        
+                        </v-list-item>
+                    <v-divider :key="`divfor-${i}`" v-if="details.length-1 !== i"/>
+                </template>
+            </v-list>
+        </v-card>
+
+        <v-card class="flex-grow-1 mb-3">
             <v-card-title>Notes</v-card-title>
             <v-card-text v-html="markdownInfo"></v-card-text>
         </v-card>
@@ -149,6 +167,9 @@ export default Vue.extend({
     watch: {
     },
     computed: {
+        details(): [string, any][] {
+            return Object.entries((this as any).client).filter(([k, v]) => !(this as any).clientInfo[k].hidden)
+        },
         client(): Client | undefined {
             return (this.$altStore.$data.clientsdb as ClientsDB).clients.find( (c) => c.id === this.$route.params.id)
         },
