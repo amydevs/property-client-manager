@@ -124,6 +124,7 @@ import chokidar from "chokidar";
 import schedule from "node-schedule";
 
 import { Client, ClientsDB } from "@/modules/ClientsDB";
+import { RawLocation } from 'vue-router'
 
 const store = new Store({ watch: true });
 
@@ -147,6 +148,7 @@ async function init() {
   })
 }
 
+let notif;
 function scheduleAllInDb(db:ClientsDB) {
   for (const [name, job] of Object.entries(schedule.scheduledJobs)) {
     job.cancel();
@@ -155,7 +157,11 @@ function scheduleAllInDb(db:ClientsDB) {
     for (const reminder of client.reminders) {
       schedule.scheduleJob(new Date(reminder.date), ()=> {
         console.log(`Shown reminder for ${client.fname} ${client.lname}`)
-        new Notification({title: reminder.title, body: reminder.details}).show()
+        notif = new Notification({title: reminder.title, body: reminder.details});
+        notif.on("click", (e) => {
+          win.webContents.send("router-push", { path: "/client-detail", params: { id : client.id } } as RawLocation);
+        })
+        notif.show();
       })
     }
   }

@@ -58,6 +58,7 @@
 <script lang="ts">
 import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
+import { RawLocation } from 'vue-router';
 
 export default Vue.extend({
   name: 'App',
@@ -69,6 +70,9 @@ export default Vue.extend({
     if (this.$refs.appbar) {
       appbaro.observe((this.$refs.appbar as any).$el);
     }
+    window.electron.ipc.receive("router-push", (event:RawLocation | string) => {
+      this.$router.push(event);
+    });
   },
   data: () => ({
     appbarHeight: 48,
