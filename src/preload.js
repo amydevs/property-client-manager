@@ -3,6 +3,7 @@ const {
     ipcRenderer,
     shell
 } = require("electron");
+const path = require("path");
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
@@ -20,8 +21,11 @@ contextBridge.exposeInMainWorld("electron", {
         }
     },
     shell: {
-        openExternalPlayer: (url) => {
+        openExternal: (url) => {
             shell.openExternal(url);
+        },
+        openPath: (url) => {
+            shell.openPath(path.resolve(url));
         }
     },
     ipc: {

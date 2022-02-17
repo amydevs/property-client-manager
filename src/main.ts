@@ -27,6 +27,7 @@ declare global {
       },
       shell: {
         openExternalPlayer: (url: string) => void
+        openPath: (url: string) => void
       },
       ipc: {
         invoke: (channel: string, data?: any) => Promise<any>;

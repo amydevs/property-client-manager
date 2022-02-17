@@ -154,6 +154,13 @@ function scheduleAllInDb(db:ClientsDB) {
     job.cancel();
   }
   for (const client of db.clients) {
+
+    //create path
+    const dir = path.join(db.clientsPath, client.id)
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+  
     for (const reminder of client.reminders) {
       schedule.scheduleJob(new Date(reminder.date), ()=> {
         console.log(`Shown reminder for ${client.fname} ${client.lname}`)

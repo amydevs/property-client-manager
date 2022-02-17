@@ -30,6 +30,19 @@
     <v-btn
         fab 
         fixed
+        bottom
+        left
+        @click="openFolder"
+        color="primary"
+        :style="{ left: '50%', transform:'translateX(-50%)'}"
+    >
+        <v-icon dark>
+            mdi-folder-account
+        </v-icon>
+    </v-btn>
+    <v-btn
+        fab 
+        fixed
         right
         bottom
         :to="{path: `/client-create/${client.id}`}"
@@ -51,10 +64,12 @@
 import ClientComp from '@/components/Client/Client.vue'
 import ClientReminders from '@/components/Reminders/RemindersContainer.vue'
 
+import path from "path";
 import mdit from "markdown-it";
 const md = new mdit({
     linkify: true
 });
+const dbForClient = window.electron.clients.get();
 
 import { Client, ClientInfo, Reminder } from '@/modules/ClientsDB'
 import Vue from 'vue'
@@ -65,7 +80,7 @@ export default Vue.extend({
     },
     data() {
         return {
-            client: window.electron.clients.get()?.clients.find( (c) => c.id === this.$route.params.id),
+            client: dbForClient?.clients.find( (c) => c.id === this.$route.params.id),
             markdownInfo: "",
             clientInfo: new ClientInfo(),
             createNewReminderOpen: false,
@@ -79,6 +94,11 @@ export default Vue.extend({
     mounted() {
         if (this.client) {
             this.markdownInfo = md.render(this.client.notes);
+        }
+    },
+    methods: {
+        openFolder() {
+            if (dbForClient && this.client) window.electron.shell.openPath(path.join(dbForClient?.clientsPath, this.client?.id));
         }
     },
     watch: {
