@@ -6,8 +6,8 @@
                 <v-list-item v-if="!slotProp.opened">
                     <v-list-item-content>
                         <v-list-item-title>{{reminder.title}}</v-list-item-title>
-                        <v-list-item-subtitle>{{reminder.details}}</v-list-item-subtitle>
-                        <div v-if="reminder.details.length !== 0" v-html="md.render(reminder.details)"></div>
+                        <v-list-item-subtitle>{{new Date(reminder.date).toLocaleString()}}</v-list-item-subtitle>
+                        <v-list-item-subtitle v-if="reminder.details.length !== 0" v-html="md.render(reminder.details)"/>
 
                     </v-list-item-content>
                     
