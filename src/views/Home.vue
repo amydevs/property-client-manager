@@ -6,7 +6,7 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    <ClientContainer v-if="clientsdb" :clients="clientsdb.clients" />
+    <ClientContainer v-if="clientsdb" :clients="$store.state.Clients.value.clients" />
     <v-btn
       fab 
       fixed
@@ -42,10 +42,6 @@ export default Vue.extend({
   },
   mounted() {
     console.log(this.$data.clientsdb)
-    this.delFunc = window.electron.ipc.receive("clients-changed", (event:any) => {
-      console.log("changed")
-      this.clientsdb = event;
-    });
   },
   beforeDestroy() {
     if (this.delFunc) {

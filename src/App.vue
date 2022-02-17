@@ -85,14 +85,18 @@ export default Vue.extend({
     ],
   }),
   computed: {
-    currentRouteName() {
+    currentRouteName(): string | undefined | null {
       return this.$route.name;
+    },
+    clientsdbstring() {
+      return JSON.stringify(this.$store.state.Clients.value)
     }
   },
   watch: {
-    '$store.state.Clients.value': {
+    'clientsdbstring': {
       handler(newValue, oldValue) {
-        window.electron.clients.write(newValue);
+        if (newValue !== oldValue)
+        window.electron.clients.write(this.$store.state.Clients.value);
       },
       deep: true
     }

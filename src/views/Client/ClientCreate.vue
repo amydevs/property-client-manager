@@ -93,6 +93,8 @@ export default Vue.extend({
                         tempDbClients[existingClientIndex] = this.client; 
                     }
                     else tempDbClients.push(this.client);
+                    
+                    this.$router.go(-1);
                     // let existingClientIndex = tempDb.clients.
 
                     // console.log(existingClientIndex)
