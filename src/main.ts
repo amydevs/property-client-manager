@@ -5,7 +5,17 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import { ClientsDB } from './modules/ClientsDB'
 
+
 Vue.prototype.$electron = window.electron
+
+import alt from './store/alt'
+Vue.prototype.$altStore = alt
+declare module 'vue/types/vue' {
+  interface Vue {
+    $altStore: Vue
+  }
+}
+
 Vue.config.productionTip = false
 
 new Vue({
