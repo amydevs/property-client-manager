@@ -99,8 +99,13 @@
         returnVal = returnVal.filter(e => {
           var searchBool = true
           if (len !== 0) {
+            
             searchBool =  (
-              e.fname.toLowerCase().includes(lowercaseSearch)
+              e.fname.toLowerCase().includes(lowercaseSearch) ||
+              e.lname.toLowerCase().includes(lowercaseSearch) ||
+              e.email.toLowerCase().includes(lowercaseSearch) ||
+              e.phone.toLowerCase().includes(lowercaseSearch) ||
+              e.id.toLowerCase() === lowercaseSearch
             )
           }
           return searchBool
