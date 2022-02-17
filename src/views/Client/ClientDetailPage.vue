@@ -33,6 +33,7 @@
         right
         fixed
         open-on-hover
+        transition="slide-y-reverse-transition"
     >
         <template v-slot:activator>
             <v-btn
@@ -49,10 +50,19 @@
         <v-btn
             fab
             @click="openFolder"
-            color="accent"
+            color="orange"
         >
             <v-icon dark>
                 mdi-folder-account
+            </v-icon>
+        </v-btn>
+        <v-btn
+            fab
+            @click="deleteCurrent"
+            color="red"
+        >
+            <v-icon dark>
+                mdi-delete
             </v-icon>
         </v-btn>
     </v-speed-dial>
@@ -127,6 +137,13 @@ export default Vue.extend({
     methods: {
         openFolder() {
             if (this.client) window.electron.shell.openPath(path.join((this.$altStore.$data.clientsdb as ClientsDB).clientsPath, this.client?.id));
+        },
+        deleteCurrent() {
+            const clientdb = this.$altStore.$data.clientsdb as ClientsDB | null;
+            if (clientdb) {
+                clientdb.clients.splice(clientdb.clients.findIndex( (c) => c.id === this.client?.id), 1) 
+                this.$router.go(-1)
+            }
         }
     },
     watch: {
