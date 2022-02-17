@@ -27,7 +27,35 @@
             mdi-arrow-left
         </v-icon>
     </v-btn>
-    <v-btn
+    <v-speed-dial
+        v-model="spdDial"
+        bottom
+        right
+        fixed
+        open-on-hover
+    >
+        <template v-slot:activator>
+            <v-btn
+                v-model="spdDial"
+                fab
+                color="primary"
+            >
+                <v-icon dark>
+                    mdi-account-edit
+                </v-icon>
+            </v-btn>
+        </template>
+        <v-btn
+            fab
+            @click="openFolder"
+            color="accent"
+        >
+            <v-icon dark>
+                mdi-folder-account
+            </v-icon>
+        </v-btn>
+    </v-speed-dial>
+    <!-- <v-btn
         fab 
         fixed
         bottom
@@ -51,7 +79,7 @@
         <v-icon dark>
             mdi-account-edit
         </v-icon>
-    </v-btn>
+    </v-btn> -->
 
      <v-footer app bottom fixed padless class="px-1 text-caption">
         Updated: {{ new Date(client.updated).toLocaleString() }}
@@ -80,6 +108,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            spdDial: false,
             client: dbForClient?.clients.find( (c) => c.id === this.$route.params.id),
             markdownInfo: "",
             clientInfo: new ClientInfo(),
