@@ -98,9 +98,8 @@ import mdit from "markdown-it";
 const md = new mdit({
     linkify: true
 });
-const dbForClient = window.electron.clients.get();
 
-import { Client, ClientInfo, Reminder } from '@/modules/ClientsDB'
+import { Client, ClientInfo, ClientsDB, Reminder } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
     components: {
@@ -110,7 +109,6 @@ export default Vue.extend({
     data() {
         return {
             spdDial: false,
-            client: dbForClient?.clients.find( (c) => c.id === this.$route.params.id),
             markdownInfo: "",
             clientInfo: new ClientInfo(),
             createNewReminderOpen: false,
@@ -128,29 +126,14 @@ export default Vue.extend({
     },
     methods: {
         openFolder() {
-            if (dbForClient && this.client) window.electron.shell.openPath(path.join(dbForClient?.clientsPath, this.client?.id));
+            if (this.client) window.electron.shell.openPath(path.join((this.$altStore.$data.clientsdb as ClientsDB).clientsPath, this.client?.id));
         }
     },
     watch: {
-        clonedClient: {
-            handler(newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    const tempDb = window.electron.clients.get();
-                    let existingClientIndex = tempDb?.clients.findIndex((e) => e.id === this.$route.params.id);
-                    
-
-                    if (tempDb && this.client && typeof existingClientIndex === "number" && existingClientIndex !== -1) {
-                        tempDb.clients[existingClientIndex] = this.client;
-                        window.electron.clients.write(tempDb);
-                    }
-                }  
-            },
-            deep: true
-        }
     },
     computed: {
-        clonedClient(): string {
-            return JSON.stringify(this.client);
+        client(): Client | undefined {
+            return (this.$altStore.$data.clientsdb as ClientsDB).clients.find( (c) => c.id === this.$route.params.id)
         },
         btnHeight(): number {
             if (!this.$refs.backBtn) return 56
