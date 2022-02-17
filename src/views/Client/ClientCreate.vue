@@ -97,7 +97,6 @@ export default Vue.extend({
                     }
                     else tempDb?.clients.push(this.client);
                     
-                    if (tempDb) window.electron.clients.write(tempDb)
                     this.$router.go(-1)
                 }
             }
