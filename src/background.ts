@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, shell, Notification } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -154,7 +154,8 @@ function scheduleAllInDb(db:ClientsDB) {
   for (const client of db.clients) {
     for (const reminder of client.reminders) {
       schedule.scheduleJob(new Date(reminder.date), ()=> {
-        console.log("hit", client.fname)
+        console.log(`Shown reminder for ${client.fname} ${client.lname}`)
+        new Notification({title: reminder.title, body: reminder.details}).show()
       })
     }
   }
