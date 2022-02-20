@@ -189,18 +189,21 @@ function iterateOverDb(db:ClientsDB) {
   }
 }
 
+// reinitialize application
 ipcMain.handle("clients-init", async (event, arg) => {
   await init()
 })
 
+// return clients database to UI
 ipcMain.on("clients-get", async (event, arg) => {
   event.returnValue = db;
 })
+// Write clients database to file when received message from UI
 ipcMain.handle("clients-write", (e, adb:ClientsDB) => {
   (new ClientsDB(adb)).write();
 })
 
-//handlers
+//h Handlers for minimize, maximize, and close button.
 ipcMain.on('window-handle', (event, handletype) => {
   switch (handletype) {
     case "minimize":
@@ -214,12 +217,14 @@ ipcMain.on('window-handle', (event, handletype) => {
       break;
   }
 })
+
+// Sends an HTTP request using from the backend process to get around CORS.
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
   return { data: result.data, status: result.status }
 })
 
-// IPC listener
+// Gets/Sets values in settings.
 ipcMain.on("electron-store-get", async (event, val) => {
   event.returnValue = store.get(val);
 });
@@ -227,6 +232,7 @@ ipcMain.on("electron-store-set", async (event, key, val) => {
   store.set(key, val);
 });
 
+// Locate folder dialog.
 ipcMain.on('dialog-open', (event) => {
   try {
     event.returnValue = dialog.showOpenDialogSync({
@@ -237,22 +243,3 @@ ipcMain.on('dialog-open', (event) => {
     event.returnValue = null
   } 
 })
-
-// import low from 'lowdb';
-// import FileSync from 'lowdb/adapters/FileSync';
-
-// const adapter = new FileSync('db.json')
-// const db = low(adapter)
- 
-// // Set some defaults
-// db.defaults({ posts: [], user: {} })
-//   .write()
- 
-// // Add a post
-// db.get('posts')
-//   .push({ id: 1, title: 'lowdb is awesome'})
-//   .write()
- 
-// // Set a user using Lodash shorthand syntax
-// db.set('user.name', 'typicode')
-//   .write()
