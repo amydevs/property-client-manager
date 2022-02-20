@@ -5,8 +5,7 @@ const {
 } = require("electron");
 const path = require("path");
 
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
+// Expose protected methods that allow the UI process to access backend functions
 
 contextBridge.exposeInMainWorld("electron", {
     clients: {
