@@ -134,38 +134,53 @@ let dbWatcher: chokidar.FSWatcher | undefined;
 async function init() {
   console.log("initted")
   if (dbWatcher) {
+    // If database file is currently being watched, stop watching it for changes.
     await dbWatcher.close();
   }
+
+  //Get clients path and database path from settings file.
   const clientsPath = store.get("clientsPath") as string;
   const dbPath = path.join(clientsPath, "db.json");
+
+  // read database and iterate over it
   db = new ClientsDB(dbPath);
-  scheduleAllInDb(db);
+  iterateOverDb(db);
+
+  // on database file change, read database and iterate over it again.
   dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
     console.log(event)
     db = new ClientsDB(dbPath);
-    scheduleAllInDb(db);
+    iterateOverDb(db);
+
+    // Send updated database to UI
     win.webContents.send("clients-changed", db);
   })
 }
 
+// iterable notification buffer variable to avoid garbage collection during iteration over database
 let notif;
-function scheduleAllInDb(db:ClientsDB) {
+function iterateOverDb(db:ClientsDB) {
+  // Cancel all scheduled reminders if there are any
   for (const [name, job] of Object.entries(schedule.scheduledJobs)) {
     job.cancel();
   }
+
+  // For each client in the database, create folder for client, then assign all reminder notifications
   for (const client of db.clients) {
 
-    //create path
+    // Create client folder
     const dir = path.join(db.clientsPath, client.id)
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
-  
+    
+    // Schedule reminder notifications for each client
     for (const reminder of client.reminders) {
       schedule.scheduleJob(new Date(reminder.date), ()=> {
         console.log(`Shown reminder for ${client.fname} ${client.lname}`)
         notif = new Notification({title: reminder.title, body: reminder.details});
         notif.on("click", (e) => {
+          // On clicking the notification, the UI is told to navigate to the page associated with the reminder's client
           win.webContents.send("router-push", { path: `/client-detail/${client.id}` } as RawLocation);
         })
         notif.show();
