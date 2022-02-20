@@ -116,7 +116,7 @@ if (isDevelopment) {
   }
 }
 
-// custom code
+// End of Boiler Plate Code
 import fs from "fs";
 import axios from "axios"
 import Store from "electron-store";
@@ -131,6 +131,7 @@ const store = new Store({ watch: true });
 let db: ClientsDB | undefined;
 let dbWatcher: chokidar.FSWatcher | undefined;
 
+//** Init Custom Logic */
 async function init() {
   console.log("initted")
   if (dbWatcher) {
@@ -159,6 +160,7 @@ async function init() {
 
 // iterable notification buffer variable to avoid garbage collection during iteration over database
 let notif;
+//** Iterate over database, assigning notifications and creating related folders. */ 
 function iterateOverDb(db:ClientsDB) {
   // Cancel all scheduled reminders if there are any
   for (const [name, job] of Object.entries(schedule.scheduledJobs)) {
