@@ -2,10 +2,13 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 
+/** The type that the clients database file gets derserialized to */
 export class ClientsDB {
     clientsPath = "";
     jsonPath: string = "";
     clients: Client[] = [];
+
+    /** Constructor for class that takes either the path of the JSON clients database file, or an instance of it*/
     constructor(jsonPathOrInst: string | ClientsDB, clientsPath: string | undefined = undefined) {
         if (typeof jsonPathOrInst == "string") {
             this.jsonPath = jsonPathOrInst;
@@ -29,6 +32,7 @@ export class ClientsDB {
             this.clientsPath = path.join(this.jsonPath, "..");
         }
     }
+    //** Excludes the unneccessary content when serializing */
     toJson(key:string, value:any) {
         switch (key) {
             case "clientsPath":
@@ -37,12 +41,14 @@ export class ClientsDB {
         }
         return value;
     }
+    // serializes the file to and writes to the path of the clients database.
     write() {
         fs.writeFileSync(this.jsonPath, JSON.stringify(this, this.toJson));
     }
 
 }
 
+// type of info of each field in clientinfo
 export class FieldInfo {
     name: string;
     hidden?: boolean;
@@ -54,6 +60,7 @@ export class FieldInfo {
     }
 }
 
+// Information for each field in the Client type.
 export class ClientInfo {
     id = new FieldInfo("id", true);
     fname = new FieldInfo("First Name");
@@ -74,6 +81,7 @@ export class ClientInfo {
     reminders = new FieldInfo("Reminders", true);
 }
 export class Client {
+    // Defaults for creating a new instance of Client, with uuidv4() representing a unique, randomly generated id.
     id = uuidv4();
     fname = "";
     lname = "";
@@ -94,6 +102,7 @@ export class Client {
 }
 
 export class Reminder {
+    // Defaults for creating a new instance of Reminder, with uuidv4() representing a unique, randomly generated id.
     id = uuidv4();
     title = "";
     details = "";
