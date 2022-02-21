@@ -34,7 +34,7 @@
   import ClientComp from '@/components/Client/Client.vue'
   import { Client, Reminder } from '@/modules/ClientsDB'
 
-  const sorts = ["Date of Next Appointment" , "First Name", "Last Name", "Email"] as const;
+  const sorts = ["Date of Next Reminder" , "First Name", "Last Name", "Email"] as const;
 
   export default Vue.extend({
     name: 'ChartsContainer',    
@@ -42,7 +42,7 @@
       return {
         search: '',
         sorts: sorts,
-        sortBy: sorts[1] as typeof sorts[number],
+        sortBy: sorts[0] as typeof sorts[number],
         sortReverse: false,
         length: 1,
       }
@@ -66,7 +66,7 @@
         }
 
         switch (this.sortBy) {
-          case "Date of Next Appointment":
+          case "Date of Next Reminder":
             returnVal.sort((a,b) => {
               return getLowestTimeOr0(a.reminders, true)
               - 
