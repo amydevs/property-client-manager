@@ -1,5 +1,7 @@
 <template>
-  <v-app>    
+  <v-app>
+
+    <!-- navigation bar / draggable area -->
     <v-app-bar
       ref="appbar"
       app
@@ -7,9 +9,12 @@
       fixed
       clipped-right
     >
+      <!-- button for opening navigation drawer and title of current page -->
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
+      <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
+      <!-- window draggable area -->
       <v-spacer></v-spacer>
+       <!-- buttons for window controls -->
       <v-btn icon @click="$electron.window.handle('minimize')">
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
@@ -21,6 +26,7 @@
       </v-btn>
     </v-app-bar>
 
+    <!-- navigation drawer -->
     <v-navigation-drawer
       v-model="drawer"
       temporary
@@ -29,11 +35,11 @@
       <v-list
         dense nav
       >
+        <!-- for each item in the menuItems variable, create a new button for navigating to the page associated with the button -->
         <v-list-item-group color='primary' mandatory>
             <v-list-item
-                v-for="item in items"
+                v-for="item in menuItems"
                 :key="item.title"
-                
                 router :to="item.route"
             >
               <v-list-item-icon>
@@ -79,12 +85,13 @@ export default Vue.extend({
     drawer: false,
     len: 0,
     perc: 0,
-    items: [
+    menuItems: [
       {icon: 'mdi-home', title:'Home', route:'/'},
       {icon: 'mdi-cog', title:'Settings', route:'/settings'}
     ],
   }),
   computed: {
+    // reactive getter for name of current route.
     currentRouteName(): string | null | undefined {
       return this.$route.name;
     }
