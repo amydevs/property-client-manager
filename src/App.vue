@@ -52,7 +52,9 @@
           </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
-
+    
+    <!-- the renderer for pages to be slotted into (height is calculated by subtracting the total height of the page by height of the navigation bar) -->
+    <!-- this is done to make sure the scroll bar is not outside the window -->
     <v-main :style="`height: calc(100vh - ${appbarHeight}px);`" class="">
       <keep-alive include="Home">
         <router-view :key="$route.fullPath" />
@@ -69,13 +71,14 @@ import { RawLocation } from 'vue-router';
 export default Vue.extend({
   name: 'App',
   mounted() {
-    // appbar observer
-    const appbaro = new ResizeObserver((e) => {
+    // watch the height of the navigation bar for changes
+    const appbarObserver = new ResizeObserver((e) => {
       this.appbarHeight = e[0].contentRect.width;
     });
     if (this.$refs.appbar) {
-      appbaro.observe((this.$refs.appbar as any).$el);
+      appbarObserver.observe((this.$refs.appbar as any).$el);
     }
+    // receives messages from backend to navigate to a certain page
     window.electron.ipc.receive("router-push", (event:RawLocation | string) => {
       this.$router.push(event);
     });
