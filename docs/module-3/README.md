@@ -1,2 +1,2 @@
-# Module 3
+# Module 3 - User Interface Module - Client Creation
 ![Flowchart](flowchart.drawio.svg)
