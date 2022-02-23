@@ -60,6 +60,7 @@
         <router-view :key="$route.fullPath" />
       </keep-alive>
     </v-main>
+    <PathDialog />
   </v-app>
 </template>
 
@@ -67,9 +68,13 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 import { RawLocation } from 'vue-router';
+import PathDialog from '@/components/PathDialog.vue'
 
 export default Vue.extend({
   name: 'App',
+  components: {
+    PathDialog
+  },
   mounted() {
     // watch the height of the navigation bar for changes
     const appbarObserver = new ResizeObserver((e) => {
