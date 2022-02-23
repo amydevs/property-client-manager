@@ -1,6 +1,6 @@
 # Documentation for Project
-## Flowchart
-![Flowchart](dataflow2.drawio.svg)
+## Data Flow Diagram
+![Data Flow Diagram](dataflow2.drawio.svg)
 
 ## Structure Chart
-![Flowchart](dataflow2.drawio.svg)
+![Structure Chart](structure.drawio.svg)
