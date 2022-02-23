@@ -48,7 +48,7 @@
             type: 'directory',
             title: "Set Folder Path",
             subtitle: "Set Folder Path For Clients Here",
-            placeholder: "C:\\Program Files\\Steam\\steamapps\\common\\Muse Dash\\",
+            placeholder: "C:\\",
             hint: "Please Press Enter After Typing in Your Path!",
             cb(v: string) {
               const existsBool = window.electron.fs.existsSync(v)
