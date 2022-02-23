@@ -140,22 +140,27 @@ async function init() {
   }
 
   //Get clients path and database path from settings file.
-  const clientsPath = store.get("clientsPath") as string;
-  const dbPath = path.join(clientsPath, "db.json");
+  try {
+    const clientsPath = store.get("clientsPath") as string;
+    const dbPath = path.join(clientsPath, "db.json");
 
-  // read database and iterate over it
-  db = new ClientsDB(dbPath);
-  iterateOverDb(db);
-
-  // on database file change, read database and iterate over it again.
-  dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
-    console.log(event)
+    // read database and iterate over it
     db = new ClientsDB(dbPath);
     iterateOverDb(db);
 
-    // Send updated database to UI
-    win.webContents.send("clients-changed", db);
-  })
+    // on database file change, read database and iterate over it again.
+    dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
+      console.log(event)
+      db = new ClientsDB(dbPath);
+      iterateOverDb(db);
+
+      // Send updated database to UI
+      win.webContents.send("clients-changed", db);
+    })
+  }
+  catch(e) {
+   console.log("couldn't grab clients database") 
+  }
 }
 
 // iterable notification buffer variable to avoid garbage collection during iteration over database
