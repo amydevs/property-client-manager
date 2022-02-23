@@ -67,7 +67,7 @@
     </v-form>
 </template>
 <script lang="ts">
-import { Client, ClientInfo } from '@/modules/ClientsDB'
+import { Client, ClientInfo, ClientsDB } from '@/modules/ClientsDB'
 import Vue from 'vue'
 export default Vue.extend({
     data: () => {
@@ -77,15 +77,15 @@ export default Vue.extend({
         }
     },
     mounted() {
-        const slugClientFromID = window.electron.clients.get()?.clients.find(c => c.id == this.$route.params.id);
+        const slugClientFromID = (this.$altStore.$data.clientsdb as ClientsDB).clients.find(c => c.id == this.$route.params.id);
         if (slugClientFromID) {
-            this.client = slugClientFromID;
+            this.client = {...slugClientFromID};
         }
     },
     methods: {
         done() {
             if ((this.$refs.form as any).validate()) {
-                const tempDb = window.electron.clients.get()
+                const tempDb = (this.$altStore.$data.clientsdb as ClientsDB)
                 if (tempDb) {
                     let existingClientIndex = tempDb.clients.findIndex((e) => e.id === this.client.id);
 
@@ -97,7 +97,6 @@ export default Vue.extend({
                     }
                     else tempDb?.clients.push(this.client);
                     
-                    if (tempDb) window.electron.clients.write(tempDb)
                     this.$router.go(-1)
                 }
             }

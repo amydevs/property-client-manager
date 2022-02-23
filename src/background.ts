@@ -116,7 +116,7 @@ if (isDevelopment) {
   }
 }
 
-// custom code
+// End of Boiler Plate Code
 import fs from "fs";
 import axios from "axios"
 import Store from "electron-store";
@@ -131,42 +131,59 @@ const store = new Store({ watch: true });
 let db: ClientsDB | undefined;
 let dbWatcher: chokidar.FSWatcher | undefined;
 
+//** Init Custom Logic */
 async function init() {
   console.log("initted")
   if (dbWatcher) {
+    // If database file is currently being watched, stop watching it for changes.
     await dbWatcher.close();
   }
+
+  //Get clients path and database path from settings file.
   const clientsPath = store.get("clientsPath") as string;
   const dbPath = path.join(clientsPath, "db.json");
+
+  // read database and iterate over it
   db = new ClientsDB(dbPath);
-  scheduleAllInDb(db);
+  iterateOverDb(db);
+
+  // on database file change, read database and iterate over it again.
   dbWatcher = chokidar.watch(dbPath).on("all", (event, path) => {
     console.log(event)
     db = new ClientsDB(dbPath);
-    scheduleAllInDb(db);
+    iterateOverDb(db);
+
+    // Send updated database to UI
     win.webContents.send("clients-changed", db);
   })
 }
 
+// iterable notification buffer variable to avoid garbage collection during iteration over database
 let notif;
-function scheduleAllInDb(db:ClientsDB) {
+//** Iterate over database, assigning notifications and creating related folders. */ 
+function iterateOverDb(db:ClientsDB) {
+  // Cancel all scheduled reminders if there are any
   for (const [name, job] of Object.entries(schedule.scheduledJobs)) {
     job.cancel();
   }
+
+  // For each client in the database, create folder for client, then assign all reminder notifications
   for (const client of db.clients) {
 
-    //create path
+    // Create client folder
     const dir = path.join(db.clientsPath, client.id)
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
-  
+    
+    // Schedule reminder notifications for each client
     for (const reminder of client.reminders) {
       schedule.scheduleJob(new Date(reminder.date), ()=> {
         console.log(`Shown reminder for ${client.fname} ${client.lname}`)
         notif = new Notification({title: reminder.title, body: reminder.details});
         notif.on("click", (e) => {
-          win.webContents.send("router-push", { path: "/client-detail", params: { id : client.id } } as RawLocation);
+          // On clicking the notification, the UI is told to navigate to the page associated with the reminder's client
+          win.webContents.send("router-push", { path: `/client-detail/${client.id}` } as RawLocation);
         })
         notif.show();
       })
@@ -174,18 +191,21 @@ function scheduleAllInDb(db:ClientsDB) {
   }
 }
 
+// reinitialize application
 ipcMain.handle("clients-init", async (event, arg) => {
   await init()
 })
 
+// return clients database to UI
 ipcMain.on("clients-get", async (event, arg) => {
   event.returnValue = db;
 })
+// Write clients database to file when received message from UI
 ipcMain.handle("clients-write", (e, adb:ClientsDB) => {
   (new ClientsDB(adb)).write();
 })
 
-//handlers
+//h Handlers for minimize, maximize, and close button.
 ipcMain.on('window-handle', (event, handletype) => {
   switch (handletype) {
     case "minimize":
@@ -199,12 +219,14 @@ ipcMain.on('window-handle', (event, handletype) => {
       break;
   }
 })
+
+// Sends an HTTP request using from the backend process to get around CORS.
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
   return { data: result.data, status: result.status }
 })
 
-// IPC listener
+// Gets/Sets values in settings.
 ipcMain.on("electron-store-get", async (event, val) => {
   event.returnValue = store.get(val);
 });
@@ -212,6 +234,7 @@ ipcMain.on("electron-store-set", async (event, key, val) => {
   store.set(key, val);
 });
 
+// Locate folder dialog.
 ipcMain.on('dialog-open', (event) => {
   try {
     event.returnValue = dialog.showOpenDialogSync({
@@ -222,22 +245,3 @@ ipcMain.on('dialog-open', (event) => {
     event.returnValue = null
   } 
 })
-
-// import low from 'lowdb';
-// import FileSync from 'lowdb/adapters/FileSync';
-
-// const adapter = new FileSync('db.json')
-// const db = low(adapter)
- 
-// // Set some defaults
-// db.defaults({ posts: [], user: {} })
-//   .write()
- 
-// // Add a post
-// db.get('posts')
-//   .push({ id: 1, title: 'lowdb is awesome'})
-//   .write()
- 
-// // Set a user using Lodash shorthand syntax
-// db.set('user.name', 'typicode')
-//   .write()

@@ -34,7 +34,7 @@
   import ClientComp from '@/components/Client/Client.vue'
   import { Client, Reminder } from '@/modules/ClientsDB'
 
-  const sorts = ["Date of Next Appointment" , "First Name", "Last Name", "Email"] as const;
+  const sorts = ["Date of Next Reminder" , "First Name", "Last Name", "Email"] as const;
 
   export default Vue.extend({
     name: 'ChartsContainer',    
@@ -42,7 +42,7 @@
       return {
         search: '',
         sorts: sorts,
-        sortBy: sorts[1] as typeof sorts[number],
+        sortBy: sorts[0] as typeof sorts[number],
         sortReverse: false,
         length: 1,
       }
@@ -59,14 +59,14 @@
       searchFilter(): Client[] {
         const len = this.search.length
         
-        var returnVal = this.clients
+        var returnVal = this.clients.slice()
         const getLowestTimeOr0 = (reminders: Reminder[], inf: boolean = false) => {
           const val = inf ? Infinity : 0;
           return reminders.length === 0 ? val : new Date( reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date ).getTime();
         }
 
         switch (this.sortBy) {
-          case "Date of Next Appointment":
+          case "Date of Next Reminder":
             returnVal.sort((a,b) => {
               return getLowestTimeOr0(a.reminders, true)
               - 
@@ -99,8 +99,13 @@
         returnVal = returnVal.filter(e => {
           var searchBool = true
           if (len !== 0) {
+            
             searchBool =  (
-              e.fname.toLowerCase().includes(lowercaseSearch)
+              e.fname.toLowerCase().includes(lowercaseSearch) ||
+              e.lname.toLowerCase().includes(lowercaseSearch) ||
+              e.email.toLowerCase().includes(lowercaseSearch) ||
+              e.phone.toLowerCase().includes(lowercaseSearch) ||
+              e.id.toLowerCase() === lowercaseSearch
             )
           }
           return searchBool

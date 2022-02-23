@@ -6,7 +6,7 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    <ClientContainer v-if="clientsdb" :clients="clientsdb.clients" />
+    <ClientContainer :clients="$altStore.$data.clientsdb.clients" />
     <v-btn
       fab 
       fixed
@@ -33,24 +33,15 @@ export default Vue.extend({
   components: {
     ClientContainer
   },
-  data: () => {
+  data() {
     return {
       loaded: true,
-      clientsdb: window.electron.clients.get(),
       delFunc: null as null | (() => void),
     }
   },
   mounted() {
-    console.log(this.$data.clientsdb)
-    this.delFunc = window.electron.ipc.receive("clients-changed", (event:any) => {
-      console.log("changed")
-      this.clientsdb = event;
-    });
   },
   beforeDestroy() {
-    if (this.delFunc) {
-      this.delFunc();
-    }
   },
 })
 </script>
