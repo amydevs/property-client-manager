@@ -3,7 +3,7 @@
 ```mermaid
 gantt
     dateFormat  YYYY-MM-DD
-    title TaxCalc.com Development
+    title Real Estate Client Tracker Development (Stage 1)
     %% (`excludes` accepts specific dates in YYYY-MM-DD format, days of the week ("sunday") or "weekends", but not the word "weekdays".)
 	
 	section Folio
