@@ -14,7 +14,8 @@
         <v-card-text class="pt-3">
             Your Folder for Storing Clients' Information and Documents has not been set. Please set it here. (It is recommended that you create a new empty folder somewhere for this purpose)
             <v-text-field
-                label="Game Path"
+                ref="pathfield"
+                label="Clients Folder Path"
                 placeholder="C:\Program Files\Steam\steamapps\common\Muse Dash\"
                 class="mt-3"
                 outlined
@@ -52,8 +53,8 @@
         clientsPath: path.join(window.electron.app.getDocumentsPath(), "clients_folder"),
         dialog: false,
         rules: [
-          () => window.electron.fs.existsSync(this.$data.clientsPath) || "Game Path Does Not Exist"
-        ]
+          () => window.electron.fs.existsSync(this.$data.clientsPath) || "Clients Folder Path Does Not Exist"
+        ],
       }
     },
     async mounted() {
@@ -68,14 +69,24 @@
           this.clientsPath = folders[0]
         }
       },
-      exit() {
+      async exit() {
         if (window.electron.fs.existsSync(this.clientsPath)) {
-          window.electron.store.set("clientsPath", this.clientsPath)
-          window.electron.ipc.invoke("clients-init")
-          this.dialog = false
+            
+            window.electron.store.set("clientsPath", this.clientsPath)
+            await window.electron.ipc.invoke("clients-init")
+            this.dialog = false
         }
         else {
-          console.log("Invalid Path")
+            await this.$nextTick(() => {
+                setTimeout(() => {
+                    (this.$refs.pathfield as any).$refs.input.focus()
+                });
+                this.clientsPath += " "
+            });
+            await this.$nextTick(() => {
+                this.clientsPath = this.clientsPath.slice(0, -1)
+            });
+            console.log("Invalid Path")
         }
       },
     }
