@@ -210,6 +210,23 @@ ipcMain.handle("clients-write", (e, adb:ClientsDB) => {
   (new ClientsDB(adb)).write();
 })
 
+// Write clients database to file when received message from UI
+ipcMain.handle("app-base64encodefile", (e, base64path: string) => {
+  try {
+    if (db) {
+      const rel = path.relative(db.clientsPath, base64path);
+      if (!rel.startsWith('../') && rel !== '..') {
+        var bitmap = fs.readFileSync(path.resolve(base64path));
+        return Buffer.from(bitmap).toString('base64');
+      }
+    }
+    throw new Error("Path santization blocked")
+  }
+  catch (error) {
+    return undefined;
+  }
+})
+
 //h Handlers for minimize, maximize, and close button.
 ipcMain.on('window-handle', (event, handletype) => {
   switch (handletype) {
