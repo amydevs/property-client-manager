@@ -224,6 +224,9 @@ ipcMain.on('window-handle', (event, handletype) => {
       break;
   }
 })
+ipcMain.on("app-getPath", (event, name: any) => {
+  event.returnValue = app.getPath(name)
+})
 
 // Sends an HTTP request using from the backend process to get around CORS.
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {

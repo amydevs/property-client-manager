@@ -37,6 +37,9 @@ declare global {
       window: {
         handle: (handleType: "minimize" | "maximize" | "close") => void;
       },
+      app: {
+        getDocumentsPath: () => string
+      },
       shell: {
         openExternalPlayer: (url: string) => void
         openPath: (url: string) => void

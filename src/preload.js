@@ -19,6 +19,11 @@ contextBridge.exposeInMainWorld("electron", {
             return ipcRenderer.send("window-handle", handleType);
         }
     },
+    app: {
+        getDocumentsPath: () => {
+            return ipcRenderer.sendSync("app-getPath", "documents")
+        }
+    },
     shell: {
         openExternal: (url) => {
             shell.openExternal(url);
