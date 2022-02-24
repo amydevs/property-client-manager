@@ -31,6 +31,7 @@
             ></v-text-field>
         </template>
             <v-date-picker
+                color="primary"
                 v-model="tempDate"
             ></v-date-picker>
         </v-menu>
@@ -60,6 +61,7 @@
                 ></v-text-field>
             </template>
                 <v-time-picker
+                    color="primary"
                     v-if="timeMenu"
                     v-model="tempTime"
                     ampm-in-title
