@@ -43,12 +43,13 @@
 </template>
 <script lang="ts">
   import Vue from 'vue'
+  import path from 'path'
   
   export default Vue.extend({
     name: 'PathDialogue',
     data () {
       return {
-        clientsPath: "C:\\",
+        clientsPath: path.join(window.electron.app.getDocumentsPath(), "clients_folder"),
         dialog: false,
         rules: [
           () => window.electron.fs.existsSync(this.$data.clientsPath) || "Game Path Does Not Exist"
