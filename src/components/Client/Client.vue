@@ -27,7 +27,7 @@
             
             <v-card-title v-text="(new Boolean(client.fname.length) | new Boolean(client.lname.length)) ? `${client.fname} ${client.lname}` : `No Name`"></v-card-title>
             <v-card-subtitle v-text="
-                client.reminders.length === 0 ? 'No Reminders' : `Next Reminder: ${new Date(client.reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 ).date).toLocaleString()}`
+                client.reminders.length === 0 ? 'No Reminders' : `Next Reminder: ${new Date(closestReminder.date).toLocaleString()}`
             "></v-card-subtitle>
         </div>
     </div>
@@ -38,7 +38,7 @@
 <script lang="ts">
 import path from "path";
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Client } from '@/modules/ClientsDB'
+import { Client, Reminder } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     name: 'Client',
@@ -59,7 +59,9 @@ export default Vue.extend({
     methods: {
     },
     computed: {
-
+        closestReminder(): Reminder {
+            return this.client.reminders.reduce((a1, b1) => new Date(a1.date).getTime() < new Date(b1.date).getTime() ? a1 : b1 )
+        }
     }
 })
 </script>
