@@ -30,6 +30,9 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      path: {
+        sep: () => string
+      }
       clients: {
         get: () => ClientsDB | null
         write: (e: ClientsDB) => void

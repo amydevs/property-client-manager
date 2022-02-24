@@ -8,6 +8,9 @@ const path = require("path");
 // Expose protected methods that allow the UI process to access backend functions
 
 contextBridge.exposeInMainWorld("electron", {
+    path: {
+        sep: () => path.sep
+    },
     clients: {
         get: () => ipcRenderer.sendSync("clients-get"),
         write: (e) => {
