@@ -12,7 +12,7 @@
           class="text-h5"
         >Set Clients Folder Path</v-toolbar>
         <v-card-text class="pt-3">
-            Your Folder for Storing Clients' Information and Documents has not been set. Please set it here:
+            Your Folder for Storing Clients' Information and Documents has not been set. Please set it here. (It is recommended that you create a new empty folder somewhere for this purpose)
             <v-text-field
                 label="Game Path"
                 placeholder="C:\Program Files\Steam\steamapps\common\Muse Dash\"
