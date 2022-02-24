@@ -82,7 +82,9 @@ app.on('ready', async () => {
   await init()
   protocol.registerFileProtocol('filer', (request, callback) => {
     const urlParsed = new URL(request.url);
-    var url = request.url.replace('filer:///', '') as string;
+    var url = request.url.replace('filer://', '') as string;
+    if (process.platform === 'win32') { url = url.substring(1) }
+    console.log(url)
     url = url.substring(0, url.length - urlParsed.search.length)
     try {
       if (db) {

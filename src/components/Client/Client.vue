@@ -48,7 +48,7 @@ export default Vue.extend({
     },
     mounted() {
         const normalized = (window.electron.store.get("clientsPath") as string).split(window.electron.path.sep()).join("/")
-        this.imgPath = `filer:///${path.join(normalized, this.client.id, "profile.png")}`;
+        this.imgPath = `filer:///${path.join(path.normalize(normalized), this.client.id, "profile.png")}`;
         //  `filer://${path.join(window.electron.store.get("clientsPath") as string, this.client.id, "profile.png")}?noerror=0`
     },
     components: {
