@@ -49,3 +49,6 @@ gantt
 
 ## Structure Chart
 ![Structure Chart](structure.drawio.svg)
+
+## Storyboard
+![Storyboard](storyboard.drawio.svg)
