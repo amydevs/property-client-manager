@@ -34,6 +34,7 @@
             :events="events"
             event-overlap-mode="stack"
             @change="updateRange"
+            @click:event="eventClick"
         ></v-calendar>
       </v-sheet>
   </v-container>
@@ -41,7 +42,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {format, parseISO} from 'date-fns'
-import { ClientsDB, Reminder } from '@/modules/ClientsDB'
+import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     data() {
@@ -57,9 +58,8 @@ export default Vue.extend({
             console.log(start)
             const startDate = new Date(`${start.date}T00:00:00`),
                 endDate = new Date(`${end.date}T23:59:59`);
-            const thing = [...(this.$altStore.$data.clientsdb as ClientsDB).clients].flatMap((e) => {
-                return e.reminders.flatMap(e => {
-                    console.log(new Date(e.date) <= endDate && new Date(e.date) >= startDate)
+            const thing = [...(this.$altStore.$data.clientsdb as ClientsDB).clients].flatMap((eClient) => {
+                return eClient.reminders.flatMap(e => {
                     if (new Date(e.date) <= endDate && new Date(e.date) >= startDate)
                     {
                         return {
@@ -67,13 +67,17 @@ export default Vue.extend({
                             start: new Date(e.date),
                             end: new Date(e.date),
                             color: "primary",
-                            timed: true
+                            timed: true,
+                            client: eClient
                         } as Event
                     }
                     return []
                 })
             });
             this.events = thing;
+        },
+        eventClick({event}: {event: Event} ) {
+            this.$router.push({path: `/client-detail/${event.client?.id}`})
         }
     },
     watch: {
@@ -120,6 +124,7 @@ export type Event = {
     end: string | Date;
     color: string;
     timed: boolean;
+    client?: Client;
 }
 
 </script>
