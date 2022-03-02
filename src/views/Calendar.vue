@@ -1,6 +1,6 @@
 <template>
   <v-container>
-      <v-sheet>
+      <v-card>
         <v-toolbar>
                 <v-btn
                 fab
@@ -36,7 +36,7 @@
             @change="updateRange"
             @click:event="eventClick"
         ></v-calendar>
-      </v-sheet>
+      </v-card>
   </v-container>
 </template>
 <script lang="ts">
