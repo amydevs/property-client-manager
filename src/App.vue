@@ -38,15 +38,15 @@
         <!-- for each item in the menuItems variable, create a new button for navigating to the page associated with the button -->
         <v-list-item-group color='primary' mandatory>
             <v-list-item
-                v-for="item in menuItems"
-                :key="item.title"
-                router :to="item.route"
+                v-for="item in routes"
+                :key="item.name"
+                router :to="item.path"
             >
               <v-list-item-icon>
-                  <v-icon>{{ item.icon }}</v-icon>
+                  <v-icon>{{ item.meta.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>
-                {{ item.title }}
+                {{ item.name }}
               </v-list-item-title>
             </v-list-item>
           </v-list-item-group>
@@ -92,17 +92,17 @@ export default Vue.extend({
     appbarHeight: 48,
     drawer: false,
     len: 0,
-    perc: 0,
-    menuItems: [
-      {icon: 'mdi-home', title:'Home', route:'/'},
-      {icon: 'mdi-calendar-account', title:'Calendar', route:'/calendar'},
-      {icon: 'mdi-cog', title:'Settings', route:'/settings'}
-    ],
+    perc: 0
   }),
   computed: {
     // reactive getter for name of current route.
     currentRouteName(): string | null | undefined {
       return this.$route.name;
+    },
+    routes() {
+      return this.$router.options.routes?.filter(e => {
+        return e.meta?.show
+      });
     }
   }
 });
