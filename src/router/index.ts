@@ -21,6 +21,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Client/ClientCreate.vue')
   },
   {
+    path: '/calendar/',
+    name: 'Calendar Overview',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Calendar.vue')
+  },
+  {
     path: '/settings',
     name: 'Settings',
     // route level code-splitting

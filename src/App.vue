@@ -95,6 +95,7 @@ export default Vue.extend({
     perc: 0,
     menuItems: [
       {icon: 'mdi-home', title:'Home', route:'/'},
+      {icon: 'mdi-calendar-account', title:'Calendar', route:'/calendar'},
       {icon: 'mdi-cog', title:'Settings', route:'/settings'}
     ],
   }),
