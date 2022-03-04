@@ -1,8 +1,7 @@
 <template>
-
     <v-sheet>
         <v-toolbar>
-                <v-btn
+            <v-btn
                 fab
                 text
                 small
@@ -44,16 +43,20 @@
             offset-x
         >
             <v-card>
-                hi
+                <ReminderComp v-model="selectedEvent.reminder" />
             </v-card>
         </v-menu>
     </v-sheet>
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import ReminderComp from '@/components/Reminders/Reminder.vue'
 import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
 
 export default Vue.extend({
+    components: {
+        ReminderComp
+    },
     data() {
         return {
             focus: '',
@@ -72,7 +75,7 @@ export default Vue.extend({
             console.log(start)
             const startDate = new Date(`${start.date}T00:00:00`),
                 endDate = new Date(`${end.date}T23:59:59`);
-            const thing = [...(this.$altStore.$data.clientsdb as ClientsDB).clients].flatMap((eClient) => {
+            const thing = (this.$altStore.$data.clientsdb as ClientsDB).clients.flatMap((eClient) => {
                 return eClient.reminders.flatMap(e => {
                     if (new Date(e.date) <= endDate && new Date(e.date) >= startDate)
                     {
@@ -82,7 +85,8 @@ export default Vue.extend({
                             end: new Date(e.date),
                             color: "primary",
                             timed: true,
-                            client: eClient
+                            client: eClient,
+                            reminder: e
                         } as Event
                     }
                     return []
@@ -90,7 +94,7 @@ export default Vue.extend({
             });
             this.events = thing;
         },
-        showEvent({nativeEvent, event }: {event: Event, nativeEvent: MouseEvent} ) {
+        showEvent({event, nativeEvent}: {event: Event, nativeEvent: MouseEvent} ) {
             const open = () => {
                 this.selectedEvent = event
                 this.selectedElement = nativeEvent.target
@@ -155,6 +159,7 @@ export type Event = {
     color: string;
     timed: boolean;
     client?: Client;
+    reminder?: Reminder;
 }
 
 </script>
