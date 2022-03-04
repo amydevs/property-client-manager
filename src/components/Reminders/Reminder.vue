@@ -62,7 +62,6 @@ export default Vue.extend({
             else if (this.reminders) {
                 this.reminders.splice(this.reminders.indexOf(inputReminder), 1)
             }
-            if (false) {}
             else {
                 const client = (this.$altStore.$data.clientsdb as ClientsDB).clients.find(c => {
                     return c.reminders.includes(inputReminder)
