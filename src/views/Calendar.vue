@@ -25,16 +25,39 @@
             <v-toolbar-title v-if="$refs.calendar">
                 {{ $refs.calendar.title }}
             </v-toolbar-title>
+            <v-spacer />
+            <v-btn
+                fab
+                text
+                small
+                @click="zoomType(1)"
+                :disabled="calTypes.indexOf(type) === calTypes.length-1"
+            >
+                <v-icon small>
+                mdi-plus
+                </v-icon>
+            </v-btn>
+            <v-btn
+                fab
+                text
+                small
+                @click="zoomType(-1)"
+                :disabled="calTypes.indexOf(type) === 0"
+            >
+                <v-icon small>
+                mdi-minus
+                </v-icon>
+            </v-btn>
         </v-toolbar>
         <v-calendar
             ref="calendar"
             v-model="focus"
             color="primary"
             :events="events"
-            type="month"
+            :type="type"
             @click:event="showEvent"
-            @click:more="viewDay"
-            @click:date="viewDay"
+            @click:more="showDay"
+            @click:date="showDay"
             @change="updateRange"
         ></v-calendar>
         <v-menu
@@ -57,6 +80,8 @@ import ReminderComp from '@/components/Reminders/Reminder.vue'
 import ClientComp from '@/components/Client/Client.vue'
 import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
 
+const calTypes = ["month", 'week', 'day'] as const
+
 export default Vue.extend({
     components: {
         ReminderComp,
@@ -65,6 +90,8 @@ export default Vue.extend({
     data() {
         return {
             focus: '',
+            calTypes,
+            type: 'month' as typeof calTypes[number],
             events: [] as Event[],
 
             selectedOpen: false,
@@ -115,8 +142,12 @@ export default Vue.extend({
 
             nativeEvent.stopPropagation()
         },
-        viewDay() {
-
+        showDay({ date }: { date : string }) {
+            this.focus = date
+            this.type = 'day'
+        },
+        zoomType(inOrOut: number) {
+            this.type = this.calTypes[this.calTypes.indexOf(this.type) + inOrOut]
         },
         removeEvent(inputReminder : Reminder, inputClient : Client) {
             inputClient.reminders.splice(inputClient.reminders.indexOf(inputReminder), 1);
