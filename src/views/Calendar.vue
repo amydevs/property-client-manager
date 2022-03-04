@@ -1,4 +1,5 @@
 <template>
+    <v-container>
     <v-sheet>
         <v-toolbar>
             <v-btn
@@ -47,6 +48,7 @@
             </v-card>
         </v-menu>
     </v-sheet>
+    </v-container>
 </template>
 <script lang="ts">
 import Vue from 'vue'
