@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-      <v-card>
+
+    <v-sheet>
         <v-toolbar>
                 <v-btn
                 fab
@@ -28,30 +28,44 @@
         </v-toolbar>
         <v-calendar
             ref="calendar"
-            v-model="value"
-            type="month"
+            v-model="focus"
             color="primary"
             :events="events"
-            event-overlap-mode="stack"
+            type="month"
+            @click:event="showEvent"
+            @click:more="viewDay"
+            @click:date="viewDay"
             @change="updateRange"
-            @click:event="eventClick"
         ></v-calendar>
-      </v-card>
-  </v-container>
+        <v-menu
+            v-model="selectedOpen"
+            :close-on-content-click="false"
+            :activator="selectedElement"
+            offset-x
+        >
+            <v-card>
+                hi
+            </v-card>
+        </v-menu>
+    </v-sheet>
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import {format, parseISO} from 'date-fns'
 import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     data() {
         return {
-            value: '',
-            events: [] as Event[]
+            focus: '',
+            events: [] as Event[],
+
+            selectedOpen: false,
+            selectedElement: null as EventTarget | null,
+            selectedEvent: {} as Event
         }
     },
     mounted() {
+        (this.$refs.calendar as any).checkChange()
     },
     methods: {
         updateRange({start, end}: {start: Start; end: End}) {
@@ -76,8 +90,24 @@ export default Vue.extend({
             });
             this.events = thing;
         },
-        eventClick({event}: {event: Event} ) {
-            this.$router.push({path: `/client-detail/${event.client?.id}`})
+        showEvent({nativeEvent, event }: {event: Event, nativeEvent: MouseEvent} ) {
+            const open = () => {
+                this.selectedEvent = event
+                this.selectedElement = nativeEvent.target
+                requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true))
+            }
+
+            if (this.selectedOpen) {
+                this.selectedOpen = false
+                requestAnimationFrame(() => requestAnimationFrame(() => open()))
+            } else {
+                open()
+            }
+
+            nativeEvent.stopPropagation()
+        },
+        viewDay() {
+
         }
     },
     watch: {
