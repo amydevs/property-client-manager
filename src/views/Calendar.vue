@@ -43,7 +43,7 @@
             offset-x
         >
             <v-card>
-                <ReminderComp v-model="selectedEvent.reminder" />
+                <ReminderComp v-model="selectedEvent.reminder" @remove="removeEvent(selectedEvent.reminder, selectedEvent.client)" />
             </v-card>
         </v-menu>
     </v-sheet>
@@ -112,7 +112,12 @@ export default Vue.extend({
         },
         viewDay() {
 
-        }
+        },
+        removeEvent(inputReminder : Reminder, inputClient : Client) {
+            inputClient.reminders.splice(inputClient.reminders.indexOf(inputReminder), 1);
+            this.events.splice(this.events.findIndex(e => e.reminder?.id == inputReminder.id), 1);
+            this.selectedOpen = false;
+        },
     },
     watch: {
         value() {

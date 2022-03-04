@@ -14,6 +14,9 @@
             <v-btn icon @click="remove(reminder)">
                     <v-icon>mdi-close</v-icon>
             </v-btn>
+            <slot>
+                
+            </slot>
         </v-list-item>
     </ReminderEditor>
 </template>
