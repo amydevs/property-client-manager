@@ -44,6 +44,7 @@
             offset-x
         >
             <v-card>
+                <v-row class="justify-center"><ClientComp :client="selectedEvent.client" /></v-row>
                 <ReminderComp v-model="selectedEvent.reminder" @remove="removeEvent(selectedEvent.reminder, selectedEvent.client)" />
             </v-card>
         </v-menu>
@@ -53,11 +54,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import ReminderComp from '@/components/Reminders/Reminder.vue'
+import ClientComp from '@/components/Client/Client.vue'
 import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
 
 export default Vue.extend({
     components: {
-        ReminderComp
+        ReminderComp,
+        ClientComp
     },
     data() {
         return {
