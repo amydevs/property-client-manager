@@ -2,23 +2,8 @@
 <div>
     <v-list>
         <template v-for="(reminder, i) in sortedReminders">
-            <ReminderEditor v-model="sortedReminders[i]" v-slot="slotProp" :key="i">
-                <v-list-item v-if="!slotProp.opened">
-                    <v-list-item-content>
-                        <v-list-item-title>{{reminder.title ? reminder.title : "No Title"}}</v-list-item-title>
-                        <v-list-item-subtitle>{{new Date(reminder.date).toLocaleString()}}</v-list-item-subtitle>
-                        <v-list-item-subtitle v-if="reminder.details.length !== 0" v-html="md.render(reminder.details)"/>
-
-                    </v-list-item-content>
-                    
-                    <v-btn icon v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)">
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="remove(sortedReminders[i])">
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                </v-list-item>
-            </ReminderEditor>
+            <ReminderComp @remove="remove(sortedReminders[i])" v-model="sortedReminders[i]" :key="i">
+            </ReminderComp>
             <v-divider :key="`divfor-${i}`"/>
         </template>
     </v-list>
@@ -33,6 +18,7 @@
 </div>
 </template>
 <script lang="ts">
+import ReminderComp from '@/components/Reminders/Reminder.vue'
 import ReminderEditor from '@/components/Reminders/ReminderEditor.vue';
 
 import { Reminder, Client } from '@/modules/ClientsDB'
@@ -43,6 +29,7 @@ import mdit from "markdown-it";
 import Vue from 'vue'
 export default Vue.extend({
     components: {
+        ReminderComp,
         ReminderEditor
     },
     props: {
