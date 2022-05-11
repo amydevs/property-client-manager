@@ -68,7 +68,7 @@
         >
             <v-card>
                 <v-row class="justify-center"><ClientComp :client="selectedEvent.client" /></v-row>
-                <ReminderComp v-model="selectedEvent.reminder" @remove="removeEvent(selectedEvent.reminder, selectedEvent.client)" />
+                <ReminderComp v-if="selectedEvent.reminder" :id="selectedEvent.reminder.id" />
             </v-card>
         </v-menu>
     </v-sheet>
@@ -79,6 +79,7 @@ import Vue from 'vue'
 import ReminderComp from '@/components/Reminders/Reminder.vue'
 import ClientComp from '@/components/Client/Client.vue'
 import { Client, ClientsDB, Reminder } from '@/modules/ClientsDB'
+import store from '@/store'
 
 const calTypes = ["month", 'week', 'day'] as const
 
@@ -104,10 +105,9 @@ export default Vue.extend({
     },
     methods: {
         updateRange({start, end}: {start: Start; end: End}) {
-            console.log(start)
             const startDate = new Date(`${start.date}T00:00:00`),
                 endDate = new Date(`${end.date}T23:59:59`);
-            const thing = (this.$altStore.$data.clientsdb as ClientsDB).clients.flatMap((eClient) => {
+            const thing = store.state.clientsdb?.clients.flatMap((eClient) => {
                 return eClient.reminders.flatMap(e => {
                     if (new Date(e.date) <= endDate && new Date(e.date) >= startDate)
                     {
@@ -124,7 +124,7 @@ export default Vue.extend({
                     return []
                 })
             });
-            this.events = thing;
+            if (thing) this.events = thing;
         },
         showEvent({event, nativeEvent}: {event: Event, nativeEvent: MouseEvent} ) {
             const open = () => {
@@ -148,12 +148,7 @@ export default Vue.extend({
         },
         zoomType(inOrOut: number) {
             this.type = this.calTypes[this.calTypes.indexOf(this.type) + inOrOut]
-        },
-        removeEvent(inputReminder : Reminder, inputClient : Client) {
-            inputClient.reminders.splice(inputClient.reminders.indexOf(inputReminder), 1);
-            this.events.splice(this.events.findIndex(e => e.reminder?.id == inputReminder.id), 1);
-            this.selectedOpen = false;
-        },
+        }
     },
     watch: {
         value() {

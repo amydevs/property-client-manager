@@ -121,6 +121,7 @@
 import ClientComp from '@/components/Client/Client.vue'
 import ClientReminders from '@/components/Reminders/RemindersContainer.vue'
 
+import store from '@/store'
 import path from "path";
 import mdit from "markdown-it";
 const md = new mdit({
@@ -154,10 +155,10 @@ export default Vue.extend({
     },
     methods: {
         openFolder() {
-            if (this.client) window.electron.shell.openPath(path.join((this.$altStore.$data.clientsdb as ClientsDB).clientsPath, this.client?.id));
+            if (this.client) window.electron.shell.openPath(path.join(store.state.clientsdb?.clientsPath as string, this.client?.id));
         },
         deleteCurrent() {
-            const clientdb = this.$altStore.$data.clientsdb as ClientsDB | null;
+            const clientdb = store.state.clientsdb;
             if (clientdb) {
                 clientdb.clients.splice(clientdb.clients.findIndex( (c) => c.id === this.client?.id), 1) 
                 this.$router.go(-1)
@@ -171,7 +172,7 @@ export default Vue.extend({
             return Object.entries((this as any).client).filter(([k, v]) => !(this as any).clientInfo[k].hidden)
         },
         client(): Client | undefined {
-            return (this.$altStore.$data.clientsdb as ClientsDB).clients.find( (c) => c.id === this.$route.params.id)
+            return store.state.clientsdb?.clients.find( (c) => c.id === this.$route.params.id)
         },
         btnHeight(): number {
             if (!this.$refs.backBtn) return 56

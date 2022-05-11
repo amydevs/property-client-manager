@@ -6,16 +6,9 @@ import vuetify from './plugins/vuetify'
 import { ClientsDB } from './modules/ClientsDB'
 
 // Expose backend interfacing functions in frontend.
-Vue.prototype.$electron = window.electron
+Vue.prototype.$electron = window.electron;
 
-// Expose database handler in frontend.
-import alt from './store/alt'
-Vue.prototype.$altStore = alt
-declare module 'vue/types/vue' {
-  interface Vue {
-    $altStore: Vue
-  }
-}
+// Vue.prototype.$storeManager = StoreManager;
 
 Vue.config.productionTip = false
 

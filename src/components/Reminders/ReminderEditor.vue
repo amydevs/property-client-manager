@@ -80,22 +80,26 @@
 </div>
 </template>
 <script lang="ts">
-import { Reminder, Client } from '@/modules/ClientsDB'
+import { Reminder, Client, ClientsDB } from '@/modules/ClientsDB'
 import { format, parseISO, parse } from 'date-fns'
+import store from '@/store'
 
 import Vue from 'vue'
 export default Vue.extend({
     props: {
-        value: {
-            type: Object as () => Reminder
+        id: {
+            required: false,
+            type: String as () => string
+        },
+        clientId: {
+            type: String as () => string
         }
     },
     data() {
         return {
             createNewReminderOpen: false,
-            createNew: this.value ? false : true,
 
-            newReminder: this.value ? {...this.value} : new Reminder(),
+            newReminder: new Reminder(),
 
             menu1: false,
             tempDate: "",
@@ -104,20 +108,31 @@ export default Vue.extend({
             timeMenu: false
         }
     },
+    computed: {
+    },
     mounted() {
-        console.log(this.newReminder)
         this.tempDate = format(parseISO(new Date(this.newReminder.date).toISOString()), "yyyy-MM-dd")
         this.tempTime = format(parseISO(new Date(this.newReminder.date).toISOString()), "HH:mm")
     },
     methods: {
+        resetReminder() {
+            let foundReminder = store.state.clientsdb?.clients.find(e => e.id == this.clientId)?.reminders.find(e => e.id == this.id);
+            foundReminder ? Object.assign(this.newReminder, foundReminder) : this.newReminder = new Reminder();
+        },
         addReminder() {
+            if (!this.id) {
+                if (this.createNewReminderOpen) store.state.clientsdb?.clients.find(e => e.id == this.clientId)?.reminders.push(this.newReminder);
+            }
+            else {
+                Object.assign(store.state.clientsdb?.clients.find(e => e.id == this.clientId)?.reminders.find(e => e.id == this.newReminder.id) as Reminder, this.newReminder);
+            }
+            console.log("hsdjahsdjhasd")
             this.createNewReminderOpen = false
-            this.$emit('input', this.newReminder)
         },
     },
     watch: {
-        value() {
-            this.newReminder = {...this.value};
+        createNewReminderOpen(e: boolean) {
+            if (e) this.resetReminder();
         },
         tempDate(e: string) {
             console.log(e)

@@ -6,7 +6,7 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    <ClientContainer :clients="$altStore.$data.clientsdb.clients" />
+    <ClientContainer :clients="$store.state.clientsdb.clients" />
     <v-btn
       fab 
       fixed

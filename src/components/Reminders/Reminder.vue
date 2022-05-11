@@ -1,5 +1,5 @@
 <template>
-    <ReminderEditor v-model="reminder" v-slot="slotProp">
+    <ReminderEditor :id="reminder.id" :clientId="clientId" v-slot="slotProp">
         <v-list-item v-if="!slotProp.opened">
             <v-list-item-content>
                 <v-list-item-title>{{reminder.title ? reminder.title : "No Title"}}</v-list-item-title>
@@ -12,7 +12,7 @@
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon @click="remove(reminder)">
-                    <v-icon>mdi-close</v-icon>
+                <v-icon>mdi-close</v-icon>
             </v-btn>
             <slot>
                 
@@ -25,6 +25,7 @@ import Vue from 'vue'
 import { ClientsDB, Reminder } from '@/modules/ClientsDB'
 import ReminderEditor from '@/components/Reminders/ReminderEditor.vue';
 import mdit from "markdown-it";
+import store, { StoreUtils } from "@/store";
 
 export default Vue.extend({
     components: {
@@ -40,37 +41,32 @@ export default Vue.extend({
         }
     },
     props: {
-        value: {
-            type: Object as () => Reminder
-        },
-        reminders: {
-            type: Array as () => Reminder[]
+        id: {
+            type: String as () => string
         }
     },
     computed: {
-        reminder: {
+        reminder:{
             get(): Reminder {
-                return this.value
+                return StoreUtils.findReminderById(this.id) as Reminder;
             },
             set(e: Reminder) {
-                this.$emit('input', e)
+                let acc = store.state.clientsdb?.clients.flatMap(c => c.reminders).find(r => r.id === this.id);
+                if (acc) {
+                    acc = e;
+                }
+            }
+        },
+        clientId: {
+            get(): string {
+                return store.state.clientsdb?.clients.find(c => c.reminders.includes(this.reminder))?.id as string;
             }
         }
     },
     methods: {
-        remove(inputReminder : Reminder) {
-            if (this.$listeners['remove']) {
-                this.$emit('remove')
-            }
-            else if (this.reminders) {
-                this.reminders.splice(this.reminders.indexOf(inputReminder), 1)
-            }
-            else {
-                const client = (this.$altStore.$data.clientsdb as ClientsDB).clients.find(c => {
-                    return c.reminders.includes(inputReminder)
-                })
-                client?.reminders.splice(client?.reminders.indexOf(inputReminder), 1)
-            }
+        remove() {
+            const clientrreminders = store.state.clientsdb?.clients.find(c => c.reminders.includes(this.reminder))?.reminders;
+            clientrreminders?.splice(clientrreminders.indexOf(this.reminder), 1);
         }
     }
 })

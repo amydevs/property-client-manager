@@ -2,13 +2,13 @@
 <div>
     <v-list>
         <template v-for="(reminder, i) in sortedReminders">
-            <ReminderComp @remove="remove(sortedReminders[i])" v-model="sortedReminders[i]" :key="i">
+            <ReminderComp :id="reminder.id" :key="i">
             </ReminderComp>
             <v-divider :key="`divfor-${i}`"/>
         </template>
     </v-list>
     <v-container>
-        <ReminderEditor v-model="cleanReminder" v-slot="slotProp">
+        <ReminderEditor :clientId="value.id" :key="value.id" v-slot="slotProp">
             <v-btn style="width: 100%" dense v-if="!slotProp.opened" @click="slotProp.toggle(!slotProp.opened)"
                 color="primary">
                 Create Reminder
