@@ -65,6 +65,7 @@ export default Vue.extend({
     },
     methods: {
         remove() {
+            this.$emit("remove", this.reminder);
             const clientrreminders = store.state.clientsdb?.clients.find(c => c.reminders.includes(this.reminder))?.reminders;
             clientrreminders?.splice(clientrreminders.indexOf(this.reminder), 1);
         }

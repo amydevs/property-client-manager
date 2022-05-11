@@ -68,7 +68,7 @@
         >
             <v-card>
                 <v-row class="justify-center"><ClientComp :client="selectedEvent.client" /></v-row>
-                <ReminderComp v-if="selectedEvent.reminder" :id="selectedEvent.reminder.id" />
+                <ReminderComp v-if="selectedEvent.reminder" :id="selectedEvent.reminder.id" @remove="selectedEvent.reminder = undefined; selectedOpen = false;" />
             </v-card>
         </v-menu>
     </v-sheet>
@@ -93,11 +93,13 @@ export default Vue.extend({
             focus: '',
             calTypes,
             type: 'month' as typeof calTypes[number],
-            events: [] as Event[],
 
             selectedOpen: false,
             selectedElement: null as EventTarget | null,
-            selectedEvent: {} as Event
+            selectedEvent: {} as Event,
+            
+            startDate: new Date(),
+            endDate: new Date(),
         }
     },
     mounted() {
@@ -105,26 +107,9 @@ export default Vue.extend({
     },
     methods: {
         updateRange({start, end}: {start: Start; end: End}) {
-            const startDate = new Date(`${start.date}T00:00:00`),
-                endDate = new Date(`${end.date}T23:59:59`);
-            const thing = store.state.clientsdb?.clients.flatMap((eClient) => {
-                return eClient.reminders.flatMap(e => {
-                    if (new Date(e.date) <= endDate && new Date(e.date) >= startDate)
-                    {
-                        return {
-                            name: e.title,
-                            start: new Date(e.date),
-                            end: new Date(e.date),
-                            color: "primary",
-                            timed: true,
-                            client: eClient,
-                            reminder: e
-                        } as Event
-                    }
-                    return []
-                })
-            });
-            if (thing) this.events = thing;
+            console.log("range update")
+            this.startDate = new Date(`${start.date}T00:00:00`);
+            this.endDate = new Date(`${end.date}T23:59:59`);
         },
         showEvent({event, nativeEvent}: {event: Event, nativeEvent: MouseEvent} ) {
             const open = () => {
@@ -150,11 +135,26 @@ export default Vue.extend({
             this.type = this.calTypes[this.calTypes.indexOf(this.type) + inOrOut]
         }
     },
-    watch: {
-        value() {
-        }
-    },
     computed: {
+        events() {
+            return store.state.clientsdb?.clients.flatMap((eClient) => {
+                return eClient.reminders.flatMap(e => {
+                    if (new Date(e.date) <= this.endDate && new Date(e.date) >= this.startDate)
+                    {
+                        return {
+                            name: e.title,
+                            start: new Date(e.date),
+                            end: new Date(e.date),
+                            color: "primary",
+                            timed: true,
+                            client: eClient,
+                            reminder: e
+                        } as Event
+                    }
+                    return []
+                })
+            });
+        }
     }    
 })
 
