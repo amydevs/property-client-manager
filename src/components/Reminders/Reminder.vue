@@ -1,5 +1,5 @@
 <template>
-    <ReminderEditor :id="reminder.id" :clientId="clientId" v-slot="slotProp">
+    <ReminderEditor v-if="!deleted" :id="reminder.id" :clientId="clientId" v-slot="slotProp">
         <v-list-item v-if="!slotProp.opened">
             <v-list-item-content>
                 <v-list-item-title>{{reminder.title ? reminder.title : "No Title"}}</v-list-item-title>
@@ -32,9 +32,11 @@ export default Vue.extend({
         ReminderEditor
     },
     mounted() {
+        console.log(this)
     },
     data() {
         return {
+            deleted: false,
             md: new mdit({
                 linkify: true
             }) 
@@ -65,7 +67,8 @@ export default Vue.extend({
     },
     methods: {
         remove() {
-            this.$emit("remove", this.reminder);
+            this.deleted = true;
+            this.$emit("delete");
             const clientrreminders = store.state.clientsdb?.clients.find(c => c.reminders.includes(this.reminder))?.reminders;
             clientrreminders?.splice(clientrreminders.indexOf(this.reminder), 1);
         }

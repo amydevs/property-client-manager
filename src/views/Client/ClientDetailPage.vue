@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="!deleted">
     <v-container>
         <v-row class="justify-center mb-1">
             <client-comp :client="client"/>
@@ -137,6 +137,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            deleted: false,
             spdDial: false,
             markdownInfo: "",
             clientInfo: new ClientInfo(),
@@ -160,6 +161,7 @@ export default Vue.extend({
         deleteCurrent() {
             const clientdb = store.state.clientsdb;
             if (clientdb) {
+                this.deleted = true;
                 clientdb.clients.splice(clientdb.clients.findIndex( (c) => c.id === this.client?.id), 1) 
                 this.$router.go(-1)
             }

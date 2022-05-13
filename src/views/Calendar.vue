@@ -68,7 +68,7 @@
         >
             <v-card>
                 <v-row class="justify-center"><ClientComp :client="selectedEvent.client" /></v-row>
-                <ReminderComp v-if="selectedEvent.reminder" :id="selectedEvent.reminder.id" @remove="selectedEvent.reminder = undefined; selectedOpen = false;" />
+                <ReminderComp v-if="selectedEvent.reminder && selectedEvent.reminder.id && selectedOpen" :id="selectedEvent.reminder.id" @delete="selectedOpen = false;" />
             </v-card>
         </v-menu>
     </v-sheet>
@@ -155,7 +155,7 @@ export default Vue.extend({
                 })
             });
         }
-    }    
+    },
 })
 
 export type Start = {
