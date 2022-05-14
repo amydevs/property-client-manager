@@ -20,3 +20,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Project Documentation
 [Docs](./docs)
+
+## Install Guide
+[Install Guide](./docs/stage-3/install-guide.md)
