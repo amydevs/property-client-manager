@@ -9,7 +9,7 @@
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar
-                class="ma-3"
+                :class="`ma-3${ client_details ? ' img-hover' : '' }`"
                 size="60"
             >
             <v-img 
@@ -81,5 +81,29 @@ export default Vue.extend({
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.img-hover {
+    cursor: pointer;
+    position: relative;
+    &::after {
+        position: absolute;
+        content: "+";
+        color: white;
+        pointer-events: none;
+        opacity: 0;
+        transition: 0.2s;
+    }
+    &:hover {
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    > div {
+        transition: 0.2s;
+        &:hover {
+            filter: blur(2px) brightness(75%);
+        }
+    }
 }
 </style>
