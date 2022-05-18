@@ -13,7 +13,7 @@
                 size="60"
             >
             <v-img 
-                :src="`${imgPath}?v=${imgKey}`" 
+                :src="`${imgPath}${ imgKey ? `?v=${imgKey}` : '' }`" 
                 :alt="client.fname"
                 @click="client_details ? changePfp() : ''"
             >
