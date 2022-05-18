@@ -272,3 +272,20 @@ ipcMain.on('dialog-open', (event) => {
     event.returnValue = null
   } 
 })
+// Locate folder dialog.
+ipcMain.on('dialog-open-pfp', (event, id: string) => {
+  try {
+    const foundfile = dialog.showOpenDialogSync({
+      properties: ['openFile'],
+      filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp'] }]
+    })
+    if (foundfile && foundfile[0]) {
+      const normalized = path.normalize(store.get("clientsPath") as string);
+      fs.copyFileSync(foundfile[0], path.join(path.normalize(normalized), id, "profile.png"))
+    }
+    event.returnValue = foundfile
+  }
+  catch {
+    event.returnValue = null
+  } 
+})

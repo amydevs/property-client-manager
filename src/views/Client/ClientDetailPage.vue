@@ -2,7 +2,7 @@
 <div v-if="!deleted">
     <v-container>
         <v-row class="justify-center mb-1">
-            <client-comp :client="client"/>
+            <client-comp :client="client" client_details />
         </v-row>
         <v-card class="flex-grow-1 mb-3">
             <v-card-title>Details</v-card-title>

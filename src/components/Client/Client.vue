@@ -5,7 +5,7 @@
 >
     <v-card
         style="height: 100%"
-        :to="{path: `/client-detail/${client.id}`}"
+        :to="client_details ? '' : {path: `/client-detail/${client.id}`}"
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar
@@ -15,6 +15,7 @@
             <v-img 
                 :src="imgPath" 
                 :alt="client.fname"
+                @click="client_details ? changePfp() : ''"
             >
                 <template v-slot:placeholder>
                     <div class="placeholder primary white--text">
@@ -44,7 +45,7 @@ export default Vue.extend({
     name: 'Client',
     props: {
         client: Object as () => Client,
-        value: Number
+        client_details: Boolean
     },
     mounted() {
         const normalized = (window.electron.store.get("clientsPath") as string).split(window.electron.path.sep()).join("/")
@@ -59,6 +60,9 @@ export default Vue.extend({
         }
     },
     methods: {
+        async changePfp() {
+            console.log(window.electron.dialog.openDialogPfp(this.client.id));
+        }
     },
     computed: {
         closestReminder(): Reminder {

@@ -47,7 +47,8 @@ declare global {
         removeAll: (channel: string) => void;
       }
       dialog: {
-        openDialog: () => string[] | null
+        openDialog: () => string[] | null,
+        openDialogPfp: (id: string) => string[] | null
       },
       fs: {
         existsSync: (path: string) => boolean;

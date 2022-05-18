@@ -58,6 +58,9 @@ contextBridge.exposeInMainWorld("electron", {
         openDialog: () => {
             return ipcRenderer.sendSync('dialog-open') // adjust naming for your project
         },
+        openDialogPfp: (id) => {
+            return ipcRenderer.sendSync('dialog-open-pfp', id) // adjust naming for your project
+        },
     },
     fs: {
         existsSync: require('fs').existsSync
