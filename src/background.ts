@@ -282,6 +282,7 @@ ipcMain.on('dialog-open-pfp', (event, id: string) => {
     if (foundfile && foundfile[0]) {
       const normalized = path.normalize(store.get("clientsPath") as string);
       fs.copyFileSync(foundfile[0], path.join(path.normalize(normalized), id, "profile.png"))
+      console.log(`Copied ${foundfile[0]} to ${id}`)
       event.returnValue = foundfile
       return;
     }
