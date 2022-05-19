@@ -46,6 +46,7 @@ store.watch( (state, getters) => JSON.stringify(state.clientsdb), (newValue, old
   }, 50) 
 });
 
+// when a change is deteced on the database in the backend, the changes are written to the frontend copy of the database.
 window.electron.ipc.receive("clients-changed", (event:any) => {
   store.state.clientsdb = event;
 });
