@@ -13,12 +13,6 @@ export interface State {
 const store = new Vuex.Store<State>({
   state: {
     clientsdb: window.electron.clients.get()
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
   }
 })
 
