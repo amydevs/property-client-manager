@@ -6,13 +6,15 @@ Vue.use(Vuex)
 
 // Defines the type of the database storage accessible in the frontend.
 export interface State {
-  clientsdb: ClientsDB | null
+  clientsdb: ClientsDB | null,
+  imgKey: string,
 }
 
 // Initialize the database storage accessible in the frontend.
 const store = new Vuex.Store<State>({
   state: {
-    clientsdb: window.electron.clients.get()
+    clientsdb: window.electron.clients.get(),
+    imgKey: "",
   }
 })
 
