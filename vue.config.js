@@ -5,7 +5,10 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: false,
-      preload: 'src/preload.js'
+      preload: 'src/preload.js',
+      builderOptions: {
+        productName: 'Real Estate Client Manager'
+      }
     }
   }
 }
