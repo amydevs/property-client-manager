@@ -13,7 +13,7 @@
                 size="60"
             >
             <v-img 
-                :src="`${imgPath}${ imgKey ? `?v=${imgKey}` : '' }`" 
+                :src="`${imgPath}${ $store.state.imgKey ? `?v=${$store.state.imgKey}` : '' }`" 
                 :alt="client.fname"
                 @click="client_details ? changePfp() : ''"
             >
@@ -56,14 +56,13 @@ export default Vue.extend({
     },
     data: () => {
         return {
-            imgKey: "",
             imgPath: "unknown.png"
         }
     },
     methods: {
         async changePfp() {
             if (window.electron.dialog.openDialogPfp(this.client.id)) {
-                this.imgKey = Math.random().toString();
+                this.$store.state.imgKey = Math.random().toString();
             }
         }
     },
