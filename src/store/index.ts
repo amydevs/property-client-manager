@@ -36,7 +36,10 @@ store.watch( (state, getters) => JSON.stringify(state.clientsdb), (newValue, old
 
   // create a new timer that tells the backend to write changes the database's changes to disk when it reaches zero.
   timer = window.setTimeout(() => {
+    console.log(store.state.clientsdb?.clients.length)
+    const start = performance.now();
     window.electron.clients.write(store.state.clientsdb as ClientsDB);
+    console.log(performance.now() - start)
   }, 50) 
 });
 
